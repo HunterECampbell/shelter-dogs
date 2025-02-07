@@ -1,10 +1,18 @@
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
+import { useBearStore } from "./stores/test";
 
 function App() {
   const { t } = useTranslation();
 
-  return <Test>{t("test")}</Test>;
+  const bears = useBearStore((state): number => state.bears);
+
+  return (
+    <>
+      <Test>{t("test")}</Test>
+      <Test>{bears}</Test>
+    </>
+  );
 }
 
 const Test = styled.p`
