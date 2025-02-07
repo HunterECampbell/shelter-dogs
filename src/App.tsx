@@ -1,16 +1,22 @@
 import styled from "styled-components";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useBearStore } from "./stores/test";
 
 function App() {
   const { t } = useTranslation();
 
-  const bears = useBearStore((state): number => state.bears);
+  const { bears, getPlanets, planets } = useBearStore();
+
+  useEffect(() => {
+    getPlanets();
+  }, [getPlanets]);
 
   return (
     <>
       <Test>{t("test")}</Test>
       <Test>{bears}</Test>
+      <Test>{JSON.stringify(planets)}</Test>
     </>
   );
 }
