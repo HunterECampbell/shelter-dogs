@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useBearStore } from "./stores/test";
+import { useBearStore } from "./stores/bears";
 
 function App() {
   const { t } = useTranslation();
