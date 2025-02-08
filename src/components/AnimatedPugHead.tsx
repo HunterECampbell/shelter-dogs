@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import {
   chooseRandomFloatBetween,
   chooseRandomIntegerBetween,
-} from "../utilities/RNG";
+} from "../utils/RNG";
 import { Position, WindowSize } from "../globalTypes";
 
 import PugIcon from "../assets/pug-icon.svg?react";

@@ -1,3 +1,17 @@
 {
-  "company_name": "Pugtastic Adoptions"
+  "company_name": "Pugtastic Adoptions",
+  "login": {
+    "header": "Welcome To Pugtastic Adoptions!",
+    "message": "Please enter your name and email below to see all the furry friends who are ready to join your family!",
+    "inputs": {
+      "name": "Name",
+      "email": "Email"
+    },
+    "buttons": {
+      "login": "Access Furry Friends"
+    },
+    "errors": {
+      "email": "Please enter a valid email"
+    }
+  }
 }

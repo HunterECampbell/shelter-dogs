@@ -1,5 +1,8 @@
 :root {
+  --error: #e60000;
   --pug-tan: #eeddcd;
+  --pug-medium-dark: #856d60;
+  --pug-nearly-dark: #594840;
   --pug-dark: #2b231f;
   --pug-tongue: #df9aa4;
 }

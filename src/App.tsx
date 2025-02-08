@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 import PugBackground from "./components/PugBackground";
 import Header from "./components/Header";
+import LoginCard from "./components/LoginCard";
 
 const App = () => {
   return (
@@ -9,6 +10,7 @@ const App = () => {
       <PugBackground />
 
       <Header />
+      <LoginCard />
     </MainWrapper>
   );
 };
