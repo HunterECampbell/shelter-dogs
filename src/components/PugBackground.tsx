@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import AnimatedPugHead from "./AnimatedPugHead";
 
-function PugBackground() {
+const PugBackground = () => {
   const viewportSize: number = window.innerHeight + window.innerWidth;
   const numberOfPugs: number = Math.floor(viewportSize / 200);
 
@@ -11,7 +11,7 @@ function PugBackground() {
   );
 
   return <Background>{animatedPugHeads}</Background>;
-}
+};
 
 const Background = styled.div`
   height: 100vh;

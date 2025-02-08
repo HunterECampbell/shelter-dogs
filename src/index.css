@@ -1,3 +1,13 @@
+:root {
+  --pug-tan: #eeddcd;
+  --pug-dark: #2b231f;
+  --pug-tongue: #df9aa4;
+}
+
+* {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 html,
 body {
   padding: 0;
@@ -10,4 +20,14 @@ button,
 select,
 a {
   -webkit-tap-highlight-color: transparent;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
 }
