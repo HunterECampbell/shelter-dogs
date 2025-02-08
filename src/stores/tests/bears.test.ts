@@ -5,7 +5,7 @@ import { setupAxios } from "../../setupAxios";
 const mockAxiosInstance = {
   get: vi.fn(),
 };
-vi.mock("../../setupAxios", async () => {
+vi.mock("../../setupAxios", () => {
   return {
     setupAxios: vi.fn(() => mockAxiosInstance),
   };
@@ -30,12 +30,12 @@ describe("useBearStore", () => {
   });
 
   // API TEST
-  it("#getPlanets calls the correct GET endpoint", () => {
+  it("#getPlanets calls the correct GET endpoint", async () => {
     const expectedResult = { test: "Hi there" };
     vi.mocked(setupAxios().get).mockResolvedValue({ data: expectedResult });
     const { result } = renderHook(() => useBearStore());
 
-    act(async () => await result.current.getPlanets());
+    await act(async () => await result.current.getPlanets());
 
     expect(setupAxios().get).toHaveBeenCalledTimes(1);
     expect(setupAxios().get).toHaveBeenCalledWith(

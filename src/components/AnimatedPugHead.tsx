@@ -4,17 +4,9 @@ import {
   chooseRandomFloatBetween,
   chooseRandomIntegerBetween,
 } from "../utilities/RNG";
+import { Position, WindowSize } from "../globalTypes";
 
 import PugIcon from "../assets/pug-icon.svg?react";
-
-interface Position {
-  x: number;
-  y: number;
-}
-interface WindowSize {
-  height: number;
-  width: number;
-}
 
 const SVG_WIDTH = 125;
 
