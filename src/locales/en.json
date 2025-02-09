@@ -1,3 +1,20 @@
 {
-  "test": "This is a test."
+  "company_name": "Pugtastic",
+  "login": {
+    "header": "Welcome To Pugtastic!",
+    "message": "Please enter your name and email below to see all the furry friends who are ready to join your family!",
+    "inputs": {
+      "name": "Name",
+      "email": "Email"
+    },
+    "buttons": {
+      "login": "View Furry Friends",
+      "logout": "Logout"
+    },
+    "errors": {
+      "email": "Please enter a valid email",
+      "login_failed": "There was a problem logging you in.",
+      "logout_failed": "There was a problem logging you out."
+    }
+  }
 }
