@@ -49,6 +49,7 @@ const customTheme = createTheme({
         root: {
           borderRadius: "16px",
           padding: "16px",
+          maxWidth: "80%",
         },
       },
     },

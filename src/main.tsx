@@ -6,6 +6,7 @@ import "./i18n.ts";
 import "./index.css";
 
 import App from "./App.tsx";
+import ApplicationAlert from "./components/generalComponents/ApplicationAlert.tsx";
 import { BrowserRouter, Route, Routes } from "react-router";
 
 createRoot(document.getElementById("root")!).render(
@@ -16,6 +17,8 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/" element={<App />} />
         </Routes>
       </BrowserRouter>
+
+      <ApplicationAlert />
     </ThemeProvider>
   </StrictMode>
 );

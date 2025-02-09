@@ -11,7 +11,8 @@
       "login": "Access Furry Friends"
     },
     "errors": {
-      "email": "Please enter a valid email"
+      "email": "Please enter a valid email",
+      "login_failed": "There was a problem logging you in."
     }
   }
 }

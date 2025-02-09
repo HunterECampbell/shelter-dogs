@@ -3,26 +3,29 @@ import { styled as muiStyled } from "@mui/material/styles";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { mediaQueryBreakpoint } from "../consts/DeviceBreakpoints";
+import { isValidEmail } from "../utils/regex/emailRegex";
+import { useAuthStore } from "../stores/auth";
+import { Email } from "../globalTypes";
 
 import Button from "./generalComponents/Button";
 import Card from "@mui/material/Card";
 import TextField from "@mui/material/TextField";
-import { isValidEmail } from "../utils/regex/emailRegex";
 
 const LoginCard = () => {
   const { t } = useTranslation();
+  const { api } = useAuthStore();
 
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState<Email | "">("");
   const [emailError, setEmailError] = useState(false);
 
-  const login = () => {
-    console.log("login", name, email);
+  const login = async () => {
+    await api.login({ name, email: email as Email });
   };
   const handleSetName = (event: ChangeEvent<HTMLInputElement>) =>
-    setName(event.target.value || "");
+    setName((event.target.value as Email) || "");
   const handleSetEmail = (event: ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value || "");
+    setEmail((event.target.value as Email) || "");
   };
 
   useEffect(() => {
