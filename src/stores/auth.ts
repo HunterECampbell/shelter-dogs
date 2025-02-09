@@ -11,6 +11,7 @@ export interface AuthStoreState {
 export interface AuthStoreAPIs {
   api: {
     login: (payload: LoginBody) => void;
+    logout: () => void;
   };
 }
 
@@ -33,6 +34,20 @@ export const useAuthStore = create<AuthStoreState & AuthStoreAPIs>((set) => ({
         if (res.status === 200) set(() => ({ isAuthenticated: true }));
       } catch (error) {
         set(() => ({ isAuthenticated: false }));
+        console.error("Login Failed -", error);
+      }
+    },
+    logout: async () => {
+      try {
+        await handleResponse(
+          async () => await setupAxios().post("/auth/logout"),
+          {
+            showAlert: true,
+            errorMessage: t("login.errors.logout_failed"),
+          }
+        );
+        set(() => ({ isAuthenticated: false }));
+      } catch (error) {
         console.error("Login Failed -", error);
       }
     },

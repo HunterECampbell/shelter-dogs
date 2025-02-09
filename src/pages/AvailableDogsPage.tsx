@@ -5,7 +5,7 @@ import Header from "../components/Header";
 const AvailableDogsPage = () => {
   return (
     <MainWrapper>
-      <Header />
+      <Header showLogoutButton={true} />
     </MainWrapper>
   );
 };

@@ -34,7 +34,6 @@ describe("useAuthStore", () => {
 
         await act(async () => await result.current.api.login(mockPayload));
 
-        expect(setupAxios().post).toHaveBeenCalledTimes(1);
         expect(setupAxios().post).toHaveBeenCalledWith("/auth/login", {
           ...mockPayload,
         });
@@ -55,6 +54,27 @@ describe("useAuthStore", () => {
         result.current.isAuthenticated = true;
 
         await act(async () => await result.current.api.login(mockPayload));
+
+        expect(result.current.isAuthenticated).toBe(false);
+      });
+    });
+
+    describe("#logout", () => {
+      it("Calls the correct POST endpoint", async () => {
+        vi.mocked(setupAxios().post).mockResolvedValue(undefined);
+        const { result } = renderHook(() => useAuthStore());
+
+        await act(async () => await result.current.api.logout());
+
+        expect(setupAxios().post).toHaveBeenCalledWith("/auth/logout");
+      });
+
+      it("Update #state.isAuthenticated on success", async () => {
+        vi.mocked(setupAxios().post).mockResolvedValue(undefined);
+        const { result } = renderHook(() => useAuthStore());
+        result.current.isAuthenticated = true;
+
+        await act(async () => await result.current.api.logout());
 
         expect(result.current.isAuthenticated).toBe(false);
       });

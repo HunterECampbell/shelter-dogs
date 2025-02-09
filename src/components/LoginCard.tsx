@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { styled as muiStyled } from "@mui/material/styles";
+import { Navigate } from "react-router";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { mediaQueryBreakpoint } from "../consts/DeviceBreakpoints";
@@ -25,6 +26,7 @@ const LoginCard = () => {
     setLoggingIn(true);
     try {
       await api.login({ name, email: email as Email });
+      <Navigate to="/dashboard" replace />;
     } finally {
       setLoggingIn(false);
     }

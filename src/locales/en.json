@@ -8,11 +8,13 @@
       "email": "Email"
     },
     "buttons": {
-      "login": "View Furry Friends"
+      "login": "View Furry Friends",
+      "logout": "Logout"
     },
     "errors": {
       "email": "Please enter a valid email",
-      "login_failed": "There was a problem logging you in."
+      "login_failed": "There was a problem logging you in.",
+      "logout_failed": "There was a problem logging you out."
     }
   }
 }
