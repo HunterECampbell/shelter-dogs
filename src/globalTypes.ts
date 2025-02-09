@@ -40,6 +40,11 @@ export interface Position {
   y: number;
 }
 
+export enum RouteOptions {
+  Login = "/",
+  AvailableDogs = "/dashboard",
+}
+
 export type Size =
   | number
   | `${number}px`

@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import { styled as muiStyled } from "@mui/material/styles";
-import { Navigate } from "react-router";
+import { useNavigate } from "react-router";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { mediaQueryBreakpoint } from "../consts/DeviceBreakpoints";
 import { isValidEmail } from "../utils/regex/emailRegex";
 import { useAuthStore } from "../stores/auth";
 import { Email } from "../globalTypes";
+import { RouteOptions } from "../globalTypes";
 
 import Card from "@mui/material/Card";
 import CustomButton from "./generalComponents/CustomButton";
@@ -15,6 +16,7 @@ import TextField from "@mui/material/TextField";
 const LoginCard = () => {
   const { t } = useTranslation();
   const { api } = useAuthStore();
+  const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState<Email | "">("");
@@ -26,7 +28,7 @@ const LoginCard = () => {
     setLoggingIn(true);
     try {
       await api.login({ name, email: email as Email });
-      <Navigate to="/dashboard" replace />;
+      navigate(RouteOptions.AvailableDogs, { replace: true });
     } finally {
       setLoggingIn(false);
     }
@@ -36,7 +38,7 @@ const LoginCard = () => {
   const handleSetEmail = (event: ChangeEvent<HTMLInputElement>) => {
     setEmail((event.target.value as Email) || "");
   };
-  const handelSetBlur = () => setEmailInputHasBlurred(true);
+  const handleSetBlur = () => setEmailInputHasBlurred(true);
 
   useEffect(() => {
     setEmailError(email !== "" && !isValidEmail(email));
@@ -67,7 +69,7 @@ const LoginCard = () => {
             label={t("login.inputs.email")}
             margin="normal"
             variant="outlined"
-            onBlur={handelSetBlur}
+            onBlur={handleSetBlur}
             onChange={handleSetEmail}
           />
         </InputArea>

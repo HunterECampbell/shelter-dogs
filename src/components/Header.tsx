@@ -3,15 +3,17 @@ import styled from "styled-components";
 import { styled as muiStyled } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
 import { useAuthStore } from "../stores/auth";
-import { Navigate } from "react-router";
+import { RouteOptions } from "../globalTypes";
+import { useNavigate } from "react-router";
 
 import AppBar from "@mui/material/AppBar";
 import CustomButton from "./generalComponents/CustomButton";
 import PugIcon from "../assets/pug-icon.svg?react";
 
 const Header = ({ showLogoutButton }: { showLogoutButton?: boolean }) => {
-  const { api } = useAuthStore();
   const { t } = useTranslation();
+  const { api } = useAuthStore();
+  const navigate = useNavigate();
 
   const [loggingOut, setLoggingOut] = useState(false);
 
@@ -19,7 +21,7 @@ const Header = ({ showLogoutButton }: { showLogoutButton?: boolean }) => {
     setLoggingOut(true);
     try {
       await api.logout();
-      <Navigate to="/" replace />;
+      navigate(RouteOptions.Login, { replace: true });
     } finally {
       setLoggingOut(false);
     }
@@ -35,7 +37,7 @@ const Header = ({ showLogoutButton }: { showLogoutButton?: boolean }) => {
 
       {showLogoutButton && (
         <ButtonWrapper>
-          <LogoutButton
+          <CustomButton
             label={t("login.buttons.logout")}
             loading={loggingOut}
             onClick={logout}
@@ -84,9 +86,6 @@ const Icon = styled(PugIcon)`
 const ButtonWrapper = styled.div`
   align-self: flex-end;
   margin-right: 16px;
-`;
-
-const LogoutButton = muiStyled(CustomButton)`
 `;
 
 export default Header;

@@ -2,15 +2,14 @@ import { Navigate, Outlet } from "react-router";
 import { useAuthStore } from "../stores/auth";
 import { RouteOptions } from "../globalTypes";
 
-const ProtectedRoute = () => {
+const PublicRoute = () => {
   const { isAuthenticated } = useAuthStore();
 
-  if (!isAuthenticated) {
-    return <Navigate to={RouteOptions.Login} replace />;
+  if (isAuthenticated) {
+    return <Navigate to={RouteOptions.AvailableDogs} replace />;
   }
 
-  // Render the child routes if authenticated
   return <Outlet />;
 };
 
-export default ProtectedRoute;
+export default PublicRoute;

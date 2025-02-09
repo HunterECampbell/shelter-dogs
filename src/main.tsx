@@ -2,10 +2,14 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { ThemeProvider } from "@mui/material/styles";
 import { BrowserRouter, Route, Routes } from "react-router";
+import { RouteOptions } from "./globalTypes.ts";
+import { useAuthStore } from "./stores/auth.ts";
+import { Navigate } from "react-router";
 import customTheme from "./theme.ts";
 import "./i18n.ts";
 import "./index.css";
 
+import PublicRoute from "./components/PublicRoute.tsx";
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
 import ApplicationAlert from "./components/generalComponents/ApplicationAlert.tsx";
 
@@ -17,12 +21,28 @@ createRoot(document.getElementById("root")!).render(
     <ThemeProvider theme={customTheme}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          <Route element={<PublicRoute />}>
+            <Route path={RouteOptions.Login} element={<LoginPage />} />
+          </Route>
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/dashboard" element={<AvailableDogsPage />} />
+            <Route
+              path={RouteOptions.AvailableDogs}
+              element={<AvailableDogsPage />}
+            />
           </Route>
+
+          <Route
+            path="*"
+            element={
+              useAuthStore.getState().isAuthenticated ? (
+                <Navigate to="/dashboard" replace />
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
         </Routes>
       </BrowserRouter>
 

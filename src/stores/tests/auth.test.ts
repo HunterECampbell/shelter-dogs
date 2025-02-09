@@ -21,6 +21,20 @@ describe("useAuthStore", () => {
     });
   });
 
+  describe("#actions", () => {
+    it("#setIsAuthenticated sets #state.isAuthenticated", async () => {
+      const { result } = renderHook(() => useAuthStore());
+
+      await act(() => result.current.setIsAuthenticated(true));
+
+      expect(result.current.isAuthenticated).toBe(true);
+
+      await act(() => result.current.setIsAuthenticated(false));
+
+      expect(result.current.isAuthenticated).toBe(false);
+    });
+  });
+
   describe("#api", () => {
     describe("#login", () => {
       const mockPayload: LoginBody = {
