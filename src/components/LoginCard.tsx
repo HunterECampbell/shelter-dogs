@@ -18,9 +18,15 @@ const LoginCard = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState<Email | "">("");
   const [emailError, setEmailError] = useState(false);
+  const [loggingIn, setLoggingIn] = useState(false);
 
   const login = async () => {
-    await api.login({ name, email: email as Email });
+    setLoggingIn(true);
+    try {
+      await api.login({ name, email: email as Email });
+    } finally {
+      setLoggingIn(false);
+    }
   };
   const handleSetName = (event: ChangeEvent<HTMLInputElement>) =>
     setName((event.target.value as Email) || "");
@@ -63,6 +69,7 @@ const LoginCard = () => {
           <CustomButton
             disabled={name === "" || email === "" || emailError}
             label={t("login.buttons.login")}
+            loading={loggingIn}
             onClick={login}
           />
         </CardFooter>

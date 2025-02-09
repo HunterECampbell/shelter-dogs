@@ -7,11 +7,13 @@ const CustomButton = ({
   className,
   disabled,
   label,
+  loading,
   onClick,
 }: {
   className?: string;
   disabled?: boolean;
   label?: string;
+  loading?: boolean;
   onClick: () => void;
 }) => {
   return (
@@ -19,9 +21,10 @@ const CustomButton = ({
       aria-label={label}
       className={className}
       disabled={disabled}
+      loading={loading}
       onClick={onClick}
     >
-      <p>{label}</p>
+      {label}
     </ButtonWrapper>
   );
 };
