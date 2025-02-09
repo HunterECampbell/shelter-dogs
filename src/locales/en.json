@@ -8,7 +8,7 @@
       "email": "Email"
     },
     "buttons": {
-      "login": "Access Furry Friends"
+      "login": "View Furry Friends"
     },
     "errors": {
       "email": "Please enter a valid email",

@@ -7,8 +7,8 @@ import { isValidEmail } from "../utils/regex/emailRegex";
 import { useAuthStore } from "../stores/auth";
 import { Email } from "../globalTypes";
 
-import Button from "./generalComponents/Button";
 import Card from "@mui/material/Card";
+import CustomButton from "./generalComponents/CustomButton";
 import TextField from "@mui/material/TextField";
 
 const LoginCard = () => {
@@ -60,7 +60,7 @@ const LoginCard = () => {
         </InputArea>
 
         <CardFooter>
-          <Button
+          <CustomButton
             disabled={name === "" || email === "" || emailError}
             label={t("login.buttons.login")}
             onClick={login}

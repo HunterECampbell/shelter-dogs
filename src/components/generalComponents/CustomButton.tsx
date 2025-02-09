@@ -1,7 +1,9 @@
-import styled from "styled-components";
+import { styled as muiStyled } from "@mui/material/styles";
 import { mediaQueryBreakpoint } from "../../consts/DeviceBreakpoints";
 
-const Button = ({
+import Button from "@mui/material/Button";
+
+const CustomButton = ({
   className,
   disabled,
   label,
@@ -24,13 +26,12 @@ const Button = ({
   );
 };
 
-const ButtonWrapper = styled.button`
+const ButtonWrapper = muiStyled(Button)`
   --size: fit-content;
 
   width: var(--size);
   height: var(--size);
   color: white;
-  font-size: calc(20 / 16 * 1rem);
   padding: 8px 16px;
   border-radius: 16px;
   border: none;
@@ -63,4 +64,4 @@ const ButtonWrapper = styled.button`
   }
 `;
 
-export default Button;
+export default CustomButton;
