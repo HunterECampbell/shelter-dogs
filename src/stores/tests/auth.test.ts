@@ -1,6 +1,6 @@
 import { act, renderHook } from "@testing-library/react";
 import { setupAxios } from "../../setupAxios";
-import { useAuthStore } from "../auth";
+import { initialState, useAuthStore } from "../auth";
 import { LoginBody } from "../types/apiTypes";
 
 const mockAxiosInstance = {
@@ -13,20 +13,50 @@ vi.mock("../../setupAxios", () => {
 });
 
 describe("useAuthStore", () => {
+  describe("#state", () => {
+    it("Returns the initial state", () => {
+      const { result } = renderHook(() => useAuthStore());
+
+      expect(result.current.isAuthenticated).toBe(initialState.isAuthenticated);
+    });
+  });
+
   describe("#api", () => {
-    it("#login calls the correct POST endpoint", async () => {
+    describe("#login", () => {
       const mockPayload: LoginBody = {
         name: "Bob Builder",
         email: "bob.builder@test.com",
       };
-      vi.mocked(setupAxios().post).mockResolvedValue({ status: 200 });
-      const { result } = renderHook(() => useAuthStore());
 
-      await act(async () => await result.current.api.login(mockPayload));
+      it("Calls the correct POST endpoint", async () => {
+        vi.mocked(setupAxios().post).mockResolvedValue({ status: 200 });
+        const { result } = renderHook(() => useAuthStore());
 
-      expect(setupAxios().post).toHaveBeenCalledTimes(1);
-      expect(setupAxios().post).toHaveBeenCalledWith("/auth/login", {
-        ...mockPayload,
+        await act(async () => await result.current.api.login(mockPayload));
+
+        expect(setupAxios().post).toHaveBeenCalledTimes(1);
+        expect(setupAxios().post).toHaveBeenCalledWith("/auth/login", {
+          ...mockPayload,
+        });
+      });
+
+      it("Update #state.isAuthenticated on success", async () => {
+        vi.mocked(setupAxios().post).mockResolvedValue({ status: 200 });
+        const { result } = renderHook(() => useAuthStore());
+
+        await act(async () => await result.current.api.login(mockPayload));
+
+        expect(result.current.isAuthenticated).toBe(true);
+      });
+
+      it("Resets #state.isAuthenticated on failure", async () => {
+        vi.mocked(setupAxios().post).mockRejectedValue({ status: 401 });
+        const { result } = renderHook(() => useAuthStore());
+        result.current.isAuthenticated = true;
+
+        await act(async () => await result.current.api.login(mockPayload));
+
+        expect(result.current.isAuthenticated).toBe(false);
       });
     });
   });
