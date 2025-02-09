@@ -33,6 +33,16 @@ const LoginCard = () => {
       setLoggingIn(false);
     }
   };
+  const handleEnterKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (
+      event.key === "Enter" &&
+      !emailError &&
+      email.length > 0 &&
+      name.length > 0
+    ) {
+      login();
+    }
+  };
   const handleSetName = (event: ChangeEvent<HTMLInputElement>) =>
     setName((event.target.value as Email) || "");
   const handleSetEmail = (event: ChangeEvent<HTMLInputElement>) => {
@@ -58,6 +68,7 @@ const LoginCard = () => {
             label={t("login.inputs.name")}
             variant="outlined"
             onChange={handleSetName}
+            onKeyDown={handleEnterKey}
           />
           <TextField
             color="secondary"
@@ -71,6 +82,7 @@ const LoginCard = () => {
             variant="outlined"
             onBlur={handleSetBlur}
             onChange={handleSetEmail}
+            onKeyDown={handleEnterKey}
           />
         </InputArea>
 
