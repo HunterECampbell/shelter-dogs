@@ -24,7 +24,7 @@ declare module "@mui/material/styles" {
 const customTheme = createTheme({
   palette: {
     primary: {
-      main: "#594840", // pug-tan
+      main: "#594840", // pug-nearly-dark
     },
     secondary: {
       main: "#856d60", // pug-medium-dark

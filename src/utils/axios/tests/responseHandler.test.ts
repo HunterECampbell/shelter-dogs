@@ -1,4 +1,4 @@
-import { renderHook } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react";
 import { useAlertStore } from "../../../stores/alert";
 import handleResponse from "../responseHandler";
 
@@ -21,7 +21,7 @@ describe("utils/axios/responseHandler", () => {
   });
 
   it("Executes the callback promise function", async () => {
-    await handleResponse(mockPromiseCallback);
+    await act(async () => await handleResponse(mockPromiseCallback));
 
     expect(wasCallbackCalled).toBeTruthy();
   });
@@ -32,10 +32,13 @@ describe("utils/axios/responseHandler", () => {
       const alertStoreSpy = vi.spyOn(result.current, "createAlert");
       const successMessage = "Successfully saved workflow";
 
-      await handleResponse(mockPromiseCallback, {
-        showAlert: true,
-        successMessage,
-      });
+      await act(
+        async () =>
+          await handleResponse(mockPromiseCallback, {
+            showAlert: true,
+            successMessage,
+          })
+      );
 
       expect(alertStoreSpy).toHaveBeenCalledWith({
         message: successMessage,
@@ -52,9 +55,12 @@ describe("utils/axios/responseHandler", () => {
       const alertStoreSpy = vi.spyOn(result.current, "createAlert");
       const errorMessage = "Unable to save workflow";
 
-      await expect(
-        handleResponse(mockPromiseReject, { showAlert: true, errorMessage })
-      ).rejects.toThrow();
+      await act(
+        async () =>
+          await expect(
+            handleResponse(mockPromiseReject, { showAlert: true, errorMessage })
+          ).rejects.toThrow()
+      );
       expect(alertStoreSpy).toHaveBeenCalledWith({
         message: errorMessage,
         type: "error",

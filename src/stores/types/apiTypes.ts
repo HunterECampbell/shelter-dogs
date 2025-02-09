@@ -1,4 +1,4 @@
-import { Email } from "../globalTypes";
+import { Email } from "../../globalTypes";
 
 export interface LoginBody {
   name: string;

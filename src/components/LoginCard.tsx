@@ -41,12 +41,14 @@ const LoginCard = () => {
 
         <InputArea>
           <TextField
+            color="secondary"
             fullWidth={true}
             label={t("login.inputs.name")}
             variant="outlined"
             onChange={handleSetName}
           />
           <TextField
+            color="secondary"
             error={emailError}
             fullWidth={true}
             helperText={emailError ? t("login.errors.email") : ""}

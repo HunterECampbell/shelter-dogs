@@ -4,7 +4,7 @@ export const chooseRandomFloatBetween = ({
 }: {
   min: number;
   max: number;
-}): number => Math.random() * (max - min + 1) + min;
+}): number => Math.random() * (max - min) + min;
 
 export const chooseRandomIntegerBetween = ({
   min,

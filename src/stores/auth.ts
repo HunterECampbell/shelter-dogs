@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { setupAxios } from "../setupAxios";
-import { LoginBody } from "./apiTypes";
+import { LoginBody } from "./types/apiTypes";
 import handleResponse from "../utils/axios/responseHandler";
 import { t } from "i18next";
 
@@ -15,7 +15,7 @@ export const useAuthStore = create<AuthStoreAPIs>(() => ({
     login: async (payload: LoginBody) => {
       try {
         handleResponse(
-          async () => await setupAxios().post("/auth/loginz", { ...payload }),
+          async () => await setupAxios().post("/auth/login", { ...payload }),
           {
             showAlert: true,
             errorMessage: t("login.errors.login_failed"),
