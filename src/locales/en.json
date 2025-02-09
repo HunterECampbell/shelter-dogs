@@ -1,7 +1,7 @@
 {
-  "company_name": "Pugtastic Adoptions",
+  "company_name": "Pugtastic",
   "login": {
-    "header": "Welcome To Pugtastic Adoptions!",
+    "header": "Welcome To Pugtastic!",
     "message": "Please enter your name and email below to see all the furry friends who are ready to join your family!",
     "inputs": {
       "name": "Name",

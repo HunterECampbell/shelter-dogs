@@ -1,10 +1,11 @@
 import styled from "styled-components";
+import { styled as muiStyled } from "@mui/material/styles";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { mediaQueryBreakpoint } from "../consts/DeviceBreakpoints";
 
 import Button from "./generalComponents/Button";
-import Card from "./generalComponents/Card";
+import Card from "@mui/material/Card";
 import TextField from "@mui/material/TextField";
 import { isValidEmail } from "../utils/regex/emailRegex";
 
@@ -77,13 +78,14 @@ const LoginWrapper = styled.div`
   align-items: center;
 `;
 
-const CardWrapper = styled(Card)`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-`;
+const CardWrapper = muiStyled(Card)(({ theme }) => ({
+  backgroundColor: theme.palette.custom.pugTan,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  textAlign: "center",
+}));
 
 const CardHeader = styled.h1`
   text-align: center;

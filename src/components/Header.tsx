@@ -29,7 +29,7 @@ const IconWrapper = styled.div`
 
   height: var(--size);
   width: var(--size);
-  background: white;
+  background: var(--cream);
   padding: calc(4 / 16 * 1rem);
   border-radius: 50%;
   display: flex;
