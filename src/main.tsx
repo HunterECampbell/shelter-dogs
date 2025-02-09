@@ -21,11 +21,12 @@ createRoot(document.getElementById("root")!).render(
     <ThemeProvider theme={customTheme}>
       <BrowserRouter>
         <Routes>
+          {/* Unauth Routes */}
           <Route element={<PublicRoute />}>
             <Route path={RouteOptions.Login} element={<LoginPage />} />
           </Route>
 
-          {/* Protected Routes */}
+          {/* Auth Routes */}
           <Route element={<ProtectedRoute />}>
             <Route
               path={RouteOptions.AvailableDogs}
@@ -33,13 +34,14 @@ createRoot(document.getElementById("root")!).render(
             />
           </Route>
 
+          {/* Unknown Routes - Reroute to existing default route */}
           <Route
             path="*"
             element={
               useAuthStore.getState().isAuthenticated ? (
-                <Navigate to="/dashboard" replace />
+                <Navigate to={RouteOptions.AvailableDogs} replace />
               ) : (
-                <Navigate to="/" replace />
+                <Navigate to={RouteOptions.Login} replace />
               )
             }
           />
