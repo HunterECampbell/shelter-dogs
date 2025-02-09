@@ -1,5 +1,7 @@
 import styled from "styled-components";
+import { styled as muiStyled } from "@mui/material/styles";
 
+import AppBar from "@mui/material/AppBar";
 import PugIcon from "../assets/pug-icon.svg?react";
 
 const Header = () => {
@@ -12,16 +14,12 @@ const Header = () => {
   );
 };
 
-const HeaderWrapper = styled.div`
-  height: calc(64 / 16 * 1rem);
-  width: 100vw;
+const HeaderWrapper = muiStyled(AppBar)`
   background: var(--pug-tan);
-  position: fixed;
-  top: 0;
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.08), 0 4px 8px 0 rgba(0, 0, 0, 0.12);
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 8px 0;
 `;
 
 const IconWrapper = styled.div`

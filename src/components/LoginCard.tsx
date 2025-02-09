@@ -18,6 +18,7 @@ const LoginCard = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState<Email | "">("");
   const [emailError, setEmailError] = useState(false);
+  const [emailInputHasBlurred, setEmailInputHasBlurred] = useState(false);
   const [loggingIn, setLoggingIn] = useState(false);
 
   const login = async () => {
@@ -33,6 +34,7 @@ const LoginCard = () => {
   const handleSetEmail = (event: ChangeEvent<HTMLInputElement>) => {
     setEmail((event.target.value as Email) || "");
   };
+  const handelSetBlur = () => setEmailInputHasBlurred(true);
 
   useEffect(() => {
     setEmailError(email !== "" && !isValidEmail(email));
@@ -40,7 +42,7 @@ const LoginCard = () => {
 
   return (
     <LoginWrapper>
-      <CardWrapper>
+      <CardWrapper sx={{ boxShadow: 4 }}>
         <CardHeader>{t("login.header")}</CardHeader>
 
         <CardMessage>{t("login.message")}</CardMessage>
@@ -55,12 +57,15 @@ const LoginCard = () => {
           />
           <TextField
             color="secondary"
-            error={emailError}
+            error={emailError && emailInputHasBlurred}
             fullWidth={true}
-            helperText={emailError ? t("login.errors.email") : ""}
+            helperText={
+              emailError && emailInputHasBlurred ? t("login.errors.email") : ""
+            }
             label={t("login.inputs.email")}
             margin="normal"
             variant="outlined"
+            onBlur={handelSetBlur}
             onChange={handleSetEmail}
           />
         </InputArea>
