@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
-import PugBackground from "./components/PugBackground";
-import Header from "./components/Header";
-import LoginCard from "./components/LoginCard";
+import PugBackground from "../components/PugBackground";
+import Header from "../components/Header";
+import LoginCard from "../components/LoginCard";
 
-const App = () => {
+const LoginPage = () => {
   return (
     <MainWrapper>
       <PugBackground />
@@ -20,4 +20,4 @@ const MainWrapper = styled.div`
   width: 100vw;
 `;
 
-export default App;
+export default LoginPage;

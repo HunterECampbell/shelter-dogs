@@ -5,7 +5,7 @@ import customTheme from "./theme.ts";
 import "./i18n.ts";
 import "./index.css";
 
-import App from "./App.tsx";
+import LoginPage from "./pages/LoginPage.tsx";
 import ApplicationAlert from "./components/generalComponents/ApplicationAlert.tsx";
 import { BrowserRouter, Route, Routes } from "react-router";
 
@@ -14,7 +14,7 @@ createRoot(document.getElementById("root")!).render(
     <ThemeProvider theme={customTheme}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<App />} />
+          <Route path="/" element={<LoginPage />} />
         </Routes>
       </BrowserRouter>
 
