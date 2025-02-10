@@ -21,8 +21,10 @@ export interface DogStoreAPIs {
   api: {
     getDogsFromIDs: (
       dogIDs: DogStoreState["dogPagination"]["resultIds"]
-    ) => void;
-    searchDogs: (queryParams?: SearchDogsQueryParams) => void;
+    ) => Promise<DogStoreState["dogs"]>;
+    searchDogs: (
+      queryParams?: SearchDogsQueryParams
+    ) => Promise<DogStoreState["dogPagination"]>;
   };
 }
 
@@ -30,8 +32,8 @@ export const initialState: DogStoreState = {
   dogPagination: {
     resultIds: [],
     total: 0,
-    next: 0,
-    prev: 0,
+    next: "",
+    prev: "",
   },
   dogs: [],
 };
@@ -40,13 +42,15 @@ export const useDogsStore = create<
   DogStoreState & DogStoreActions & DogStoreAPIs
 >((set) => ({
   ...initialState,
-  setDogPagination: (dogPaginationResult: DogStoreState["dogPagination"]) =>
-    set(() => ({ dogPagination: dogPaginationResult })),
+  setDogPagination: (dogPaginationResult: DogStoreState["dogPagination"]) => {
+    console.log("actions pagination", dogPaginationResult);
+    return set(() => ({ dogPagination: dogPaginationResult }));
+  },
   setDogs: (dogs: Dog[]) => set(() => ({ dogs })),
   api: {
     getDogsFromIDs: async (
       dogIDs: DogStoreState["dogPagination"]["resultIds"]
-    ) => {
+    ): Promise<DogStoreState["dogs"]> => {
       try {
         const res = await handleResponse(
           async () => await setupAxios().post("/dogs", dogIDs),
@@ -56,13 +60,15 @@ export const useDogsStore = create<
           }
         );
 
-        set(() => ({ dogs: res.data as DogStoreState["dogs"] }));
+        return res.data;
       } catch (error) {
         console.error("Retrieving Dogs Failed -", error);
-        set(() => ({ dogs: initialState.dogs }));
+        return initialState.dogs;
       }
     },
-    searchDogs: async (queryParams?: SearchDogsQueryParams) => {
+    searchDogs: async (
+      queryParams?: SearchDogsQueryParams
+    ): Promise<DogStoreState["dogPagination"]> => {
       try {
         const res = await handleResponse(
           async () =>
@@ -75,12 +81,10 @@ export const useDogsStore = create<
           }
         );
 
-        set(() => ({
-          dogPagination: res.data as DogStoreState["dogPagination"],
-        }));
+        return res.data;
       } catch (error) {
         console.error("Retrieving Dogs Failed -", error);
-        set(() => ({ dogPagination: initialState.dogPagination }));
+        return initialState.dogPagination;
       }
     },
   },

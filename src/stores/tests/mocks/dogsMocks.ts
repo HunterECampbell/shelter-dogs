@@ -4,8 +4,6 @@ import { DogStoreState } from "../../dogs";
 export const mockDogPagination: DogStoreState["dogPagination"] = {
   resultIds: [uuidV4(), uuidV4(), uuidV4()],
   total: 3,
-  next: 0,
-  prev: 0,
 };
 
 export const mockDogs: DogStoreState["dogs"] = [

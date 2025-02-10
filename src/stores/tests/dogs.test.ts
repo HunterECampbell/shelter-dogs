@@ -63,29 +63,29 @@ describe("useDogsStore", () => {
         );
       });
 
-      it("Updates #state.dogs on success", async () => {
+      it("Returns dogs on success", async () => {
         vi.mocked(setupAxios().post).mockResolvedValue({ data: mockDogs });
         const { result } = renderHook(() => useDogsStore());
 
-        await act(
+        const res = await act(
           async () =>
             await result.current.api.getDogsFromIDs(mockDogPagination.resultIds)
         );
 
-        expect(result.current.dogs).toBe(mockDogs);
+        expect(res).toBe(mockDogs);
       });
 
-      it("Resets #state.dogs on failure", async () => {
+      it("Returns #initialState.dogs on failure", async () => {
         vi.mocked(setupAxios().post).mockRejectedValue({ status: 400 });
         const { result } = renderHook(() => useDogsStore());
         result.current.dogs = mockDogs;
 
-        await act(
+        const res = await act(
           async () =>
             await result.current.api.getDogsFromIDs(mockDogPagination.resultIds)
         );
 
-        expect(result.current.dogs).toBe(initialState.dogs);
+        expect(res).toBe(initialState.dogs);
       });
     });
 
@@ -164,25 +164,29 @@ describe("useDogsStore", () => {
         });
       });
 
-      it("Updates #state.dogs on success", async () => {
+      it("Returns dog pagination on success", async () => {
         vi.mocked(setupAxios().get).mockResolvedValue({
           data: mockDogPagination,
         });
         const { result } = renderHook(() => useDogsStore());
 
-        await act(async () => await result.current.api.searchDogs());
+        const res = await act(
+          async () => await result.current.api.searchDogs()
+        );
 
-        expect(result.current.dogPagination).toBe(mockDogPagination);
+        expect(res).toBe(mockDogPagination);
       });
 
-      it("Resets #state.dogs on failure", async () => {
+      it("Returns #initialState.dogPagination on failure", async () => {
         vi.mocked(setupAxios().get).mockRejectedValue({ status: 400 });
         const { result } = renderHook(() => useDogsStore());
         result.current.dogPagination = mockDogPagination;
 
-        await act(async () => await result.current.api.searchDogs());
+        const res = await act(
+          async () => await result.current.api.searchDogs()
+        );
 
-        expect(result.current.dogPagination).toBe(initialState.dogPagination);
+        expect(res).toBe(initialState.dogPagination);
       });
     });
   });

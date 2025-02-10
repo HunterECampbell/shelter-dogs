@@ -27,6 +27,6 @@ export enum SearchDogsSortDirection {
 export interface SearchDogsResult {
   resultIds: string[];
   total: number;
-  next: number;
-  prev: number;
+  next?: string;
+  prev?: string;
 }
