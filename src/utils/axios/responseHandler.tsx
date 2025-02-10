@@ -1,6 +1,6 @@
 import { useAlertStore } from "../../stores/alert";
 import { useAuthStore } from "../../stores/auth";
-import { AlertType } from "../../globalTypes";
+import { AlertType, RouteOptions } from "../../globalTypes";
 
 type CallbackOptions = {
   showAlert: boolean;
@@ -34,9 +34,13 @@ export async function handleResponse<T>(
       const statusCode = (e as { response: { status: number } }).response
         .status;
       message = errorMessageObject[statusCode] || errorMessageObject.default;
-      if (statusCode === 401) setIsAuthenticated(false);
     }
     createAlert({ message: message, type: AlertType.Error });
+
+    if ((e as { response: { status: number } }).response.status === 401) {
+      setIsAuthenticated(false);
+      window.location.replace(RouteOptions.Login);
+    }
 
     return Promise.reject(e);
   }

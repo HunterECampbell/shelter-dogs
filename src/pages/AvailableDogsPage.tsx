@@ -1,20 +1,30 @@
 import styled from "styled-components";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDogsStore } from "../stores/dogs";
-
-import Header from "../components/Header";
 import { SearchDogsQueryParams } from "../stores/types/apiTypes";
+
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import Header from "../components/Header";
 
 const AvailableDogsPage = () => {
   const { api, setDogPagination, setDogs } = useDogsStore();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const fetchDogs = useCallback(
     async (searchPayload?: SearchDogsQueryParams) => {
-      const paginationResult = await api.searchDogs(searchPayload);
-      await setDogPagination(paginationResult);
+      try {
+        setIsLoading(true);
 
-      const dogsResult = await api.getDogsFromIDs(paginationResult.resultIds);
-      await setDogs(dogsResult);
+        const paginationResult = await api.searchDogs(searchPayload);
+        await setDogPagination(paginationResult);
+
+        const dogsResult = await api.getDogsFromIDs(paginationResult.resultIds);
+        await setDogs(dogsResult);
+      } finally {
+        setIsLoading(false);
+      }
     },
     // This function is used outside of the useEffect and must be run only once in useEffect. Disabling next line for that reason.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -28,6 +38,10 @@ const AvailableDogsPage = () => {
   return (
     <MainWrapper>
       <Header showLogoutButton={true} />
+
+      <Backdrop open={isLoading}>
+        <CircularProgress color="pugTan" />
+      </Backdrop>
     </MainWrapper>
   );
 };

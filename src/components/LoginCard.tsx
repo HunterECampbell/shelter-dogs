@@ -112,7 +112,7 @@ const LoginWrapper = styled.div`
 `;
 
 const CardWrapper = muiStyled(Card)(({ theme }) => ({
-  backgroundColor: theme.palette.custom.pugTan,
+  backgroundColor: theme.palette.pugTan.main,
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",

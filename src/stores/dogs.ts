@@ -42,10 +42,8 @@ export const useDogsStore = create<
   DogStoreState & DogStoreActions & DogStoreAPIs
 >((set) => ({
   ...initialState,
-  setDogPagination: (dogPaginationResult: DogStoreState["dogPagination"]) => {
-    console.log("actions pagination", dogPaginationResult);
-    return set(() => ({ dogPagination: dogPaginationResult }));
-  },
+  setDogPagination: (dogPaginationResult: DogStoreState["dogPagination"]) =>
+    set(() => ({ dogPagination: dogPaginationResult })),
   setDogs: (dogs: Dog[]) => set(() => ({ dogs })),
   api: {
     getDogsFromIDs: async (
