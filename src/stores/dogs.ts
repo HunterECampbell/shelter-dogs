@@ -3,7 +3,11 @@ import { setupAxios } from "../setupAxios";
 import handleResponse from "../utils/axios/responseHandler";
 import { t } from "i18next";
 import { Dog, DogLocation } from "../globalTypes";
-import { SearchDogsQueryParams, SearchDogsResult } from "./types/apiTypes";
+import {
+  GetDogMatchResult,
+  SearchDogsQueryParams,
+  SearchDogsResult,
+} from "./types/apiTypes";
 
 export interface DogStoreState {
   allBreeds: Dog["breed"][];
@@ -32,6 +36,7 @@ export interface DogStoreActions {
 export interface DogStoreAPIs {
   api: {
     getAllBreeds: () => Promise<Dog["breed"]>;
+    getDogMatch: (favoriteDogIDs: Dog["id"][]) => Promise<GetDogMatchResult>;
     getDogsFromIDs: (
       dogIDs: DogStoreState["dogPagination"]["resultIds"]
     ) => Promise<DogStoreState["dogs"]>;
@@ -59,6 +64,7 @@ export const useDogsStore = create<
   DogStoreState & DogStoreActions & DogStoreAPIs
 >((set, get) => ({
   ...initialState,
+
   addFavoriteDog: (dog: Dog) =>
     set(() => ({ favoriteDogs: [...get().favoriteDogs, dog] })),
   checkIfDogIsFavorite: (dogID: Dog["id"]) =>
@@ -87,6 +93,7 @@ export const useDogsStore = create<
   setDogPagination: (dogPaginationResult: DogStoreState["dogPagination"]) =>
     set(() => ({ dogPagination: dogPaginationResult })),
   setDogs: (dogs: Dog[]) => set(() => ({ dogs })),
+
   api: {
     getAllBreeds: async () => {
       try {
@@ -99,6 +106,24 @@ export const useDogsStore = create<
       } catch (error) {
         console.error("Retrieving Dog Breeds Failed -", error);
         return initialState.allBreeds;
+      }
+    },
+    getDogMatch: async (
+      favoriteDogIDs: Dog["id"][]
+    ): Promise<GetDogMatchResult> => {
+      try {
+        const res = await handleResponse(
+          async () => await setupAxios().post("/dogs/match", favoriteDogIDs),
+          {
+            showAlert: true,
+            errorMessage: t("dashboard.errors.get_dogs_failed"),
+          }
+        );
+
+        return res.data;
+      } catch (error) {
+        console.error("Retrieving the Dog Match Failed -", error);
+        return { match: favoriteDogIDs[0] };
       }
     },
     getDogsFromIDs: async (

@@ -5,9 +5,11 @@ import {
   mockBreeds,
   mockDogPagination,
   mockDogs,
+  mockFavoriteDogs,
   mockLocations,
 } from "./mocks/dogsMocks";
 import {
+  GetDogMatchResult,
   SearchDogsQueryParams,
   SearchDogsSortDirection,
   SearchDogsSortField,
@@ -176,6 +178,48 @@ describe("useDogsStore", () => {
         );
 
         expect(res).toBe(initialState.allBreeds);
+      });
+    });
+
+    describe("#getDogMatch", () => {
+      const mockResult: GetDogMatchResult = {
+        match: mockFavoriteDogs[3],
+      };
+
+      it("Calls the correct POST endpoint", async () => {
+        vi.mocked(setupAxios().post).mockResolvedValue({ data: mockResult });
+        const { result } = renderHook(() => useDogsStore());
+
+        await act(
+          async () => await result.current.api.getDogMatch(mockFavoriteDogs)
+        );
+
+        expect(setupAxios().post).toHaveBeenCalledWith(
+          "/dogs/match",
+          mockFavoriteDogs
+        );
+      });
+
+      it("Returns a dog match on success", async () => {
+        vi.mocked(setupAxios().post).mockResolvedValue({ data: mockResult });
+        const { result } = renderHook(() => useDogsStore());
+
+        const res = await act(
+          async () => await result.current.api.getDogMatch(mockFavoriteDogs)
+        );
+
+        expect(res).toEqual(mockResult);
+      });
+
+      it("Returns the first favorite dog ID on failure", async () => {
+        vi.mocked(setupAxios().post).mockRejectedValue({ status: 400 });
+        const { result } = renderHook(() => useDogsStore());
+
+        const res = await act(
+          async () => await result.current.api.getDogMatch(mockFavoriteDogs)
+        );
+
+        expect(res).toEqual({ match: mockFavoriteDogs[0] });
       });
     });
 

@@ -1,5 +1,9 @@
 import { Dog, Email } from "../../globalTypes";
 
+export interface GetDogMatchResult {
+  match: Dog["id"];
+}
+
 export interface LoginBody {
   name: string;
   email: Email;

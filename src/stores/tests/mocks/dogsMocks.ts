@@ -1,5 +1,6 @@
 import { v4 as uuidV4 } from "uuid";
 import { DogStoreState } from "../../dogs";
+import { Dog } from "../../../globalTypes";
 
 export const mockBreeds = ["Test breed", "Test breed 2", "Test breed 3"];
 
@@ -26,6 +27,8 @@ export const mockDogs: DogStoreState["dogs"] = [
     breed: "Test breed 2",
   },
 ];
+
+export const mockFavoriteDogs: Dog["id"][] = [uuidV4(), uuidV4(), uuidV4()];
 
 export const mockLocations: DogStoreState["dogLocations"] = [
   {
