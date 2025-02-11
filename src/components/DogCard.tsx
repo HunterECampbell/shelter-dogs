@@ -12,7 +12,13 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import PetsIcon from "@mui/icons-material/Pets";
 
-const DogCard = ({ dogData }: { dogData: Dog }) => {
+const DogCard = ({
+  className,
+  dogData,
+}: {
+  className?: string;
+  dogData: Dog;
+}) => {
   const { t } = useTranslation();
   const {
     addFavoriteDog,
@@ -47,56 +53,58 @@ const DogCard = ({ dogData }: { dogData: Dog }) => {
   ));
 
   return (
-    <DogCardArea $isFavorite={isFavorite.current}>
-      <FlipWrapper sx={{ boxShadow: 5 }} $isFavorite={isFavorite.current}>
-        <MemoizedCardFront />
+    <div className={className}>
+      <DogCardArea $isFavorite={isFavorite.current}>
+        <FlipWrapper sx={{ boxShadow: 5 }} $isFavorite={isFavorite.current}>
+          <MemoizedCardFront />
 
-        <CardBack>
-          <DogNameBack>{dogData.name}</DogNameBack>
+          <CardBack>
+            <DogNameBack>{dogData.name}</DogNameBack>
 
-          <Divider sx={{ borderBottomWidth: 2 }} />
+            <Divider sx={{ borderBottomWidth: 2 }} />
 
-          <DetailsArea>
-            <ItemArea>
-              <PetsIcon
-                color="secondary"
-                sx={{ fontSize: "calc(40 / 16 * 1rem)" }}
+            <DetailsArea>
+              <ItemArea>
+                <PetsIcon
+                  color="secondary"
+                  sx={{ fontSize: "calc(40 / 16 * 1rem)" }}
+                />
+                <ItemDetailsArea>
+                  <ItemDetailLabel>
+                    {t("dashboard.dog_card.labels.breed")}
+                  </ItemDetailLabel>
+                  <ItemDetailValue>{dogData.breed}</ItemDetailValue>
+                </ItemDetailsArea>
+              </ItemArea>
+
+              <ItemArea>
+                <FmdGoodIcon
+                  color="secondary"
+                  sx={{ fontSize: "calc(40 / 16 * 1rem)" }}
+                />
+                <ItemDetailsArea>
+                  <ItemDetailLabel>
+                    {t("dashboard.dog_card.labels.location")}
+                  </ItemDetailLabel>
+                  <ItemDetailValue>{getLocationString()}</ItemDetailValue>
+                </ItemDetailsArea>
+              </ItemArea>
+            </DetailsArea>
+
+            <FavoriteButtonArea>
+              <CustomButton
+                label={
+                  isFavorite.current
+                    ? t("dashboard.dog_card.buttons.unfavorite")
+                    : t("dashboard.dog_card.buttons.favorite")
+                }
+                onClick={updateFavorite}
               />
-              <ItemDetailsArea>
-                <ItemDetailLabel>
-                  {t("dashboard.dog_card.labels.breed")}
-                </ItemDetailLabel>
-                <ItemDetailValue>{dogData.breed}</ItemDetailValue>
-              </ItemDetailsArea>
-            </ItemArea>
-
-            <ItemArea>
-              <FmdGoodIcon
-                color="secondary"
-                sx={{ fontSize: "calc(40 / 16 * 1rem)" }}
-              />
-              <ItemDetailsArea>
-                <ItemDetailLabel>
-                  {t("dashboard.dog_card.labels.location")}
-                </ItemDetailLabel>
-                <ItemDetailValue>{getLocationString()}</ItemDetailValue>
-              </ItemDetailsArea>
-            </ItemArea>
-          </DetailsArea>
-
-          <FavoriteButtonArea>
-            <CustomButton
-              label={
-                isFavorite.current
-                  ? t("dashboard.dog_card.buttons.unfavorite")
-                  : t("dashboard.dog_card.buttons.favorite")
-              }
-              onClick={updateFavorite}
-            />
-          </FavoriteButtonArea>
-        </CardBack>
-      </FlipWrapper>
-    </DogCardArea>
+            </FavoriteButtonArea>
+          </CardBack>
+        </FlipWrapper>
+      </DogCardArea>
+    </div>
   );
 };
 

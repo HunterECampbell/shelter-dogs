@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { useCallback, useEffect, useState } from "react";
 import { useDogsStore } from "../stores/dogs";
 import { SearchDogsQueryParams } from "../stores/types/apiTypes";
@@ -40,14 +40,40 @@ const AvailableDogsPage = () => {
     fetchDogs();
   }, [fetchDogs]);
 
+  const calculateNumCols = () => {
+    const dogCardSize = 275;
+    const gap = 24;
+    const padding = 24 * 2;
+    const containerWidth = window.innerWidth - padding;
+    const numCols = Math.floor(containerWidth / (dogCardSize + gap));
+    return numCols;
+  };
+
+  const [numCols, setNumCols] = useState(calculateNumCols());
+
+  useEffect(() => {
+    const handleResize = () => setNumCols(calculateNumCols());
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <MainWrapper>
       <Header showLogoutButton={true} />
 
-      <DogsArea>
-        {dogs.map((dogData) => (
-          <DogCard key={dogData.id} dogData={dogData} />
-        ))}
+      <DogsArea $numCols={numCols} $numItems={dogs.length}>
+        {dogs.map((dogData, index) => {
+          const row = Math.floor(index / numCols);
+          const col = index % numCols;
+          const delayIndex = row + col + 1;
+          return (
+            <DogCard
+              key={dogData.id}
+              dogData={dogData}
+              className={`d-${delayIndex}`}
+            />
+          );
+        })}
       </DogsArea>
 
       <Backdrop open={isLoading}>
@@ -57,17 +83,56 @@ const AvailableDogsPage = () => {
   );
 };
 
+const generateAnimationDelays = ({
+  numCols,
+  numItems,
+}: {
+  numCols: number;
+  numItems: number;
+}) => {
+  const rows = Math.ceil(numItems / numCols);
+  let styles = "";
+
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < numCols; col++) {
+      const delayIndex = row * numCols + col + 1;
+      styles += `
+        &.d-${delayIndex} {
+          animation-delay: ${delayIndex * 100}ms;
+        }
+      `;
+    }
+  }
+
+  return css`
+    ${styles}
+  `;
+};
+
+const mosaicRipple = keyframes`
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.05);
+  }
+  60%, 100% {
+    transform: scale(1);
+  }
+`;
+
 const MainWrapper = styled.div`
   height: 100vh;
   width: 100vw;
-  // display: flex;
-  // flex-direction: column;
   display: grid;
   grid-template-rows: auto 1fr;
   overflow: hidden;
 `;
 
-const DogsArea = styled.div`
+const DogsArea = styled.div<{
+  $numCols: number;
+  $numItems: number;
+}>`
   --header-height: 64px;
 
   margin-top: var(--header-height);
@@ -78,6 +143,15 @@ const DogsArea = styled.div`
   gap: 24px;
   overflow-y: auto;
   padding: 24px 0;
+
+  & > div {
+    animation: ${mosaicRipple} 1.5s ease;
+    ${(props) =>
+      generateAnimationDelays({
+        numCols: props.$numCols,
+        numItems: props.$numItems,
+      })}
+  }
 `;
 
 export default AvailableDogsPage;
