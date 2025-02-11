@@ -12,6 +12,9 @@ export interface DogStoreState {
 }
 
 export interface DogStoreActions {
+  retrieveLocationForZipCode: (
+    zipCode: Dog["zip_code"]
+  ) => DogLocation | Dog["zip_code"];
   setDogLocations: (dogLocations: DogStoreState["dogLocations"]) => void;
   setDogPagination: (
     dogPaginationResult: DogStoreState["dogPagination"]
@@ -46,6 +49,16 @@ export const useDogsStore = create<
   DogStoreState & DogStoreActions & DogStoreAPIs
 >((set, get) => ({
   ...initialState,
+  retrieveLocationForZipCode: (
+    zipCode: Dog["zip_code"]
+  ): DogLocation | Dog["zip_code"] => {
+    const dogLocations = get().dogLocations;
+    const dogLocation: DogLocation | undefined = dogLocations.find(
+      (location) => location?.zip_code === zipCode
+    );
+
+    return dogLocation || zipCode;
+  },
   setDogLocations: (dogLocations: DogStoreState["dogLocations"]) =>
     set(() => ({ dogLocations })),
   setDogPagination: (dogPaginationResult: DogStoreState["dogPagination"]) =>

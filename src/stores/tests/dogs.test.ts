@@ -30,6 +30,31 @@ describe("useDogsStore", () => {
   });
 
   describe("#actions", () => {
+    describe("#retrieveLocationForZipCode", () => {
+      it("Returns the location for a given zip code", async () => {
+        const { result } = renderHook(() => useDogsStore());
+        result.current.dogLocations = mockLocations;
+
+        const res = await act(() =>
+          result.current.retrieveLocationForZipCode(mockLocations[0].zip_code)
+        );
+
+        expect(res).toEqual(mockLocations[0]);
+      });
+
+      it("Returns the zip code if no location is found", async () => {
+        const mockFakeZipCode = "fake zip code";
+        const { result } = renderHook(() => useDogsStore());
+        result.current.dogLocations = mockLocations;
+
+        const res = await act(() =>
+          result.current.retrieveLocationForZipCode(mockFakeZipCode)
+        );
+
+        expect(res).toEqual(mockFakeZipCode);
+      });
+    });
+
     it("#setDogLocations sets #state.dogLocations", () => {
       const { result } = renderHook(() => useDogsStore());
 

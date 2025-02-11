@@ -2,18 +2,27 @@ import styled from "styled-components";
 import { styled as muiStyled } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
 import { Dog } from "../globalTypes";
+import { useDogsStore } from "../stores/dogs";
 
-import Card from "@mui/material/Card";
+import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import PetsIcon from "@mui/icons-material/Pets";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
 
 const DogCard = ({ dogData }: { dogData: Dog }) => {
   const { t } = useTranslation();
+  const { retrieveLocationForZipCode } = useDogsStore();
+
+  const getLocationString = (): string => {
+    const location = retrieveLocationForZipCode(dogData.zip_code);
+
+    if (typeof location === "string") return location;
+    return `${location.city}, ${location.state} ${location.zip_code}`;
+  };
 
   return (
-    <DogCardArea sx={{ boxShadow: 0 }}>
-      <FlipWrapper>
+    <DogCardArea>
+      <FlipWrapper sx={{ boxShadow: 5 }}>
         <CardFront>
           <DogImage src={dogData.img} alt={dogData.name} />
           <NameArea>
@@ -48,7 +57,7 @@ const DogCard = ({ dogData }: { dogData: Dog }) => {
               <ItemDetailLabel>
                 {t("dashboard.dog_card.labels.location")}
               </ItemDetailLabel>
-              <ItemDetailValue>{dogData.zip_code}</ItemDetailValue>
+              <ItemDetailValue>{getLocationString()}</ItemDetailValue>
             </ItemDetailsArea>
           </ItemArea>
         </CardBack>
@@ -57,7 +66,7 @@ const DogCard = ({ dogData }: { dogData: Dog }) => {
   );
 };
 
-const DogCardArea = muiStyled(Card)`
+const DogCardArea = muiStyled(Box)`
   --size: 250px;
 
   height: var(--size);
@@ -74,7 +83,7 @@ const DogCardArea = muiStyled(Card)`
   }
 `;
 
-const FlipWrapper = styled.div`
+const FlipWrapper = muiStyled(Box)`
   --size: 100%;
 
   position: relative;
@@ -111,6 +120,7 @@ const DogImage = styled.img`
   width: 100%;
   object-fit: cover;
   object-position: center;
+  border-radius: 16px;
 `;
 
 const NameArea = styled.div`
@@ -122,6 +132,7 @@ const NameArea = styled.div`
   opacity: 0.8;
   padding: 8px 16px;
   border-top-right-radius: 50px;
+  border-bottom-left-radius: 16px;
 `;
 
 const TruncatedText = styled.p`
@@ -148,6 +159,7 @@ const CardBack = styled(FlipSide)`
 
 const ItemArea = styled.div`
   display: flex;
+  justify-content: center;
   padding: 16px;
   padding-bottom: 0;
 `;
@@ -169,6 +181,7 @@ const ItemDetailValue = styled(TruncatedText)`
   color: var(--pug-dark);
   font-size: calc(20 / 16 * 1rem);
   text-align: left !important;
+  text-wrap: wrap;
 `;
 
 export default DogCard;

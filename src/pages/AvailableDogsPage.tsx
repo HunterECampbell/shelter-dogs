@@ -9,7 +9,8 @@ import DogCard from "../components/DogCard";
 import Header from "../components/Header";
 
 const AvailableDogsPage = () => {
-  const { api, setDogPagination, setDogs, dogs } = useDogsStore();
+  const { api, setDogLocations, setDogPagination, setDogs, dogs } =
+    useDogsStore();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -23,6 +24,9 @@ const AvailableDogsPage = () => {
 
         const dogsResult = await api.getDogsFromIDs(paginationResult.resultIds);
         await setDogs(dogsResult);
+
+        const dogLocationsResult = await api.getLocationsFromDogZipCodes();
+        await setDogLocations(dogLocationsResult);
       } finally {
         setIsLoading(false);
       }
