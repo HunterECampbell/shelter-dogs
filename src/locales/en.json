@@ -28,6 +28,9 @@
         "unfavorite": "Unfavorite"
       }
     },
+    "pagination": {
+      "items_per_page": "Items per page:"
+    },
     "errors": {
       "get_dogs_failed": "There was a problem retrieving the dogs.",
       "get_dog_match_failed": "There was a problem retrieving the dog you matched with.",

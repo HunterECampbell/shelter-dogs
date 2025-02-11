@@ -9,6 +9,11 @@ export interface LoginBody {
   email: Email;
 }
 
+export enum PageOptions {
+  Next = "next",
+  Previous = "prev",
+}
+
 export interface SearchDogsQueryParams {
   breeds?: Dog["breed"][];
   zipCodes?: Dog["zip_code"][];

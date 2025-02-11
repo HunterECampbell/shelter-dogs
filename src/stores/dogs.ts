@@ -5,6 +5,7 @@ import { t } from "i18next";
 import { Dog, DogLocation } from "../globalTypes";
 import {
   GetDogMatchResult,
+  PageOptions,
   SearchDogsQueryParams,
   SearchDogsResult,
 } from "./types/apiTypes";
@@ -41,9 +42,13 @@ export interface DogStoreAPIs {
       dogIDs: DogStoreState["dogPagination"]["resultIds"]
     ) => Promise<DogStoreState["dogs"]>;
     getLocationsFromDogZipCodes: () => Promise<DogStoreState["dogLocations"]>;
-    searchDogs: (
-      queryParams?: SearchDogsQueryParams
-    ) => Promise<DogStoreState["dogPagination"]>;
+    searchDogs: ({
+      pageOption,
+      queryParams,
+    }: {
+      pageOption?: PageOptions;
+      queryParams?: SearchDogsQueryParams;
+    }) => Promise<DogStoreState["dogPagination"]>;
   };
 }
 
@@ -165,13 +170,26 @@ export const useDogsStore = create<
         return initialState.dogLocations;
       }
     },
-    searchDogs: async (
-      queryParams?: SearchDogsQueryParams
-    ): Promise<DogStoreState["dogPagination"]> => {
+    searchDogs: async ({
+      pageOption,
+      queryParams,
+    }: {
+      pageOption?: PageOptions;
+      queryParams?: SearchDogsQueryParams;
+    }): Promise<DogStoreState["dogPagination"]> => {
       try {
+        const changePageByOption = (
+          pageOpt?: PageOptions
+        ): string | undefined => {
+          if (!pageOpt) return undefined;
+          if (pageOpt === PageOptions.Next) return get().dogPagination.next;
+          if (pageOpt === PageOptions.Previous) return get().dogPagination.prev;
+        };
+        const apiURL = changePageByOption(pageOption) || "/dogs/search";
+
         const res = await handleResponse(
           async () =>
-            await setupAxios().get("/dogs/search", {
+            await setupAxios().get(apiURL, {
               params: { ...queryParams },
             }),
           {

@@ -22,6 +22,7 @@ const Background = styled.div`
   top: 0;
   right: 0;
   overflow: hidden;
+  z-index: -1;
 `;
 
 const InitialPugHead = styled(PugIcon)`
@@ -30,17 +31,11 @@ const InitialPugHead = styled(PugIcon)`
 `;
 
 const PugHead = styled(InitialPugHead)`
-  --size: 25%;
-
-  height: var(--size);
-  width: var(--size);
+  width: 25%;
 `;
 
 const SmallPugHead = styled(InitialPugHead)`
-  --size: 15%;
-
-  height: var(--size);
-  width: var(--size);
+  width: 15%;
 `;
 
 const LeftPugHead = styled(PugHead)`

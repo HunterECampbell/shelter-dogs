@@ -1,32 +1,47 @@
 import styled, { css, keyframes } from "styled-components";
 import { useCallback, useEffect, useState } from "react";
 import { useDogsStore } from "../stores/dogs";
-import { SearchDogsQueryParams } from "../stores/types/apiTypes";
+import { PageOptions, SearchDogsQueryParams } from "../stores/types/apiTypes";
+import { useTranslation } from "react-i18next";
 
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import DogCard from "../components/DogCard";
 import GeneralPugBackground from "../components/GeneralPugBackground";
 import Header from "../components/Header";
+import TablePagination from "@mui/material/TablePagination";
 
 const AvailableDogsPage = () => {
   const {
     api,
+    dogPagination,
     dogs,
     setAllBreeds,
     setDogLocations,
     setDogPagination,
     setDogs,
   } = useDogsStore();
+  const { t } = useTranslation();
 
+  const [currentPageNum, setCurrentPageNum] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [itemsPerPage, setItemsPerPage] = useState(25);
 
   const fetchDogs = useCallback(
-    async (searchPayload?: SearchDogsQueryParams) => {
+    async ({
+      pageOption,
+      queryParams,
+    }: {
+      pageOption?: PageOptions;
+      queryParams?: SearchDogsQueryParams;
+    }) => {
       try {
         setIsLoading(true);
 
-        const paginationResult = await api.searchDogs(searchPayload);
+        const paginationResult = await api.searchDogs({
+          pageOption,
+          queryParams,
+        });
         await setDogPagination(paginationResult);
 
         const dogsResult = await api.getDogsFromIDs(paginationResult.resultIds);
@@ -56,7 +71,7 @@ const AvailableDogsPage = () => {
 
   useEffect(() => {
     getAllBreeds();
-    fetchDogs();
+    fetchDogs({});
   }, [getAllBreeds, fetchDogs]);
 
   const calculateNumCols = () => {
@@ -75,6 +90,21 @@ const AvailableDogsPage = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const handleChangePage = async (_: React.MouseEvent | null, page: number) => {
+    const pageOption: PageOptions =
+      currentPageNum < page ? PageOptions.Next : PageOptions.Previous;
+
+    setCurrentPageNum(page);
+    await fetchDogs({ pageOption });
+  };
+  const handleChangeItemsPerPage = async (event: React.ChangeEvent) => {
+    const target = event.target as HTMLSelectElement;
+    const newItemsPerPage: number = Number(target.value);
+
+    setItemsPerPage(newItemsPerPage);
+    await fetchDogs({ queryParams: { size: newItemsPerPage } });
+  };
 
   return (
     <MainWrapper>
@@ -96,6 +126,19 @@ const AvailableDogsPage = () => {
           );
         })}
       </DogsArea>
+
+      <PaginationWrapper>
+        <TablePagination
+          sx={{ backgroundColor: "pugTan.main" }}
+          component="div"
+          count={dogPagination.total}
+          labelRowsPerPage={t("dashboard.pagination.items_per_page")}
+          page={currentPageNum}
+          rowsPerPage={itemsPerPage}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeItemsPerPage}
+        />
+      </PaginationWrapper>
 
       <Backdrop open={isLoading}>
         <CircularProgress color="pugTan" />
@@ -133,20 +176,23 @@ const generateAnimationDelays = ({
 const mosaicRipple = keyframes`
   0% {
     transform: scale(1);
+    opacity: 0;
   }
   30% {
     transform: scale(1.05);
+    opacity: 1;
   }
   60%, 100% {
     transform: scale(1);
+    opacity: 1;
   }
 `;
 
 const MainWrapper = styled.div`
   height: 100vh;
   width: 100vw;
-  display: grid;
-  grid-template-rows: auto 1fr;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 `;
 
@@ -156,6 +202,7 @@ const DogsArea = styled.div<{
 }>`
   --header-height: 64px;
 
+  flex-grow: 1;
   margin-top: var(--header-height);
   display: flex;
   flex-wrap: wrap;
@@ -166,13 +213,19 @@ const DogsArea = styled.div<{
   padding: 24px 0;
 
   & > div {
-    animation: ${mosaicRipple} 1.5s ease;
+    opacity: 0;
+    animation: ${mosaicRipple} 1s ease forwards;
     ${(props) =>
       generateAnimationDelays({
         numCols: props.$numCols,
         numItems: props.$numItems,
       })}
   }
+`;
+
+const PaginationWrapper = styled.div`
+  display: fixed;
+  bottom: 0;
 `;
 
 export default AvailableDogsPage;

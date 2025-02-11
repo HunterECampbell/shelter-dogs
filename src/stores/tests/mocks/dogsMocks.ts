@@ -7,6 +7,8 @@ export const mockBreeds = ["Test breed", "Test breed 2", "Test breed 3"];
 export const mockDogPagination: DogStoreState["dogPagination"] = {
   resultIds: [uuidV4(), uuidV4(), uuidV4()],
   total: 3,
+  next: "/dogs/search?size=25&from=25",
+  prev: "/dogs/search?size=25&from=0",
 };
 
 export const mockDogs: DogStoreState["dogs"] = [

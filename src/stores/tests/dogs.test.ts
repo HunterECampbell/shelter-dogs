@@ -10,7 +10,9 @@ import {
 } from "./mocks/dogsMocks";
 import {
   GetDogMatchResult,
+  PageOptions,
   SearchDogsQueryParams,
+  SearchDogsResult,
   SearchDogsSortDirection,
   SearchDogsSortField,
 } from "../types/apiTypes";
@@ -26,6 +28,12 @@ vi.mock("../../setupAxios", () => {
 });
 
 describe("useDogsStore", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.resetAllMocks();
+    vi.restoreAllMocks();
+  });
+
   describe("#state", () => {
     it("Returns the initial state", () => {
       const { result } = renderHook(() => useDogsStore());
@@ -319,30 +327,30 @@ describe("useDogsStore", () => {
     });
 
     describe("#searchDogs", () => {
+      const mockQueryParams: SearchDogsQueryParams = {
+        breeds: ["Test breed", "Test breed 2"],
+        zipCodes: ["00000"],
+        ageMin: 0,
+        ageMax: 15,
+        size: 50,
+        from: 0,
+        sort: `${SearchDogsSortField.Age}:${SearchDogsSortDirection.Descending}`,
+      };
+
       it("Calls the correct GET endpoint", async () => {
         vi.mocked(setupAxios().get).mockResolvedValue({
           data: mockDogPagination,
         });
         const { result } = renderHook(() => useDogsStore());
 
-        await act(async () => await result.current.api.searchDogs());
+        await act(async () => await result.current.api.searchDogs({}));
 
         expect(setupAxios().get).toHaveBeenCalledWith("/dogs/search", {
           params: {},
         });
       });
 
-      describe("Uses the payload if any is given", () => {
-        const mockPayload: SearchDogsQueryParams = {
-          breeds: ["Test breed", "Test breed 2"],
-          zipCodes: ["00000"],
-          ageMin: 0,
-          ageMax: 15,
-          size: 50,
-          from: 0,
-          sort: `${SearchDogsSortField.Age}:${SearchDogsSortDirection.Descending}`,
-        };
-
+      describe("Uses queryParams if any are given", () => {
         it("Uses a single value in the search result", async () => {
           vi.mocked(setupAxios().get).mockResolvedValue({
             data: mockDogPagination,
@@ -352,13 +360,15 @@ describe("useDogsStore", () => {
           await act(
             async () =>
               await result.current.api.searchDogs({
-                breeds: mockPayload.breeds,
+                queryParams: {
+                  breeds: mockQueryParams.breeds,
+                },
               })
           );
 
           expect(setupAxios().get).toHaveBeenCalledWith("/dogs/search", {
             params: {
-              breeds: mockPayload.breeds,
+              breeds: mockQueryParams.breeds,
             },
           });
         });
@@ -372,15 +382,17 @@ describe("useDogsStore", () => {
           await act(
             async () =>
               await result.current.api.searchDogs({
-                breeds: mockPayload.breeds,
-                ageMax: mockPayload.ageMax,
+                queryParams: {
+                  breeds: mockQueryParams.breeds,
+                  ageMax: mockQueryParams.ageMax,
+                },
               })
           );
 
           expect(setupAxios().get).toHaveBeenCalledWith("/dogs/search", {
             params: {
-              breeds: mockPayload.breeds,
-              ageMax: mockPayload.ageMax,
+              breeds: mockQueryParams.breeds,
+              ageMax: mockQueryParams.ageMax,
             },
           });
         });
@@ -392,12 +404,163 @@ describe("useDogsStore", () => {
           const { result } = renderHook(() => useDogsStore());
 
           await act(
-            async () => await result.current.api.searchDogs({ ...mockPayload })
+            async () =>
+              await result.current.api.searchDogs({
+                queryParams: { ...mockQueryParams },
+              })
           );
 
           expect(setupAxios().get).toHaveBeenCalledWith("/dogs/search", {
-            params: { ...mockPayload },
+            params: { ...mockQueryParams },
           });
+        });
+      });
+
+      describe("Uses pageOption if any is given", () => {
+        it("Uses the next page in the search result", async () => {
+          vi.mocked(setupAxios().get).mockResolvedValue({
+            data: mockDogPagination,
+          });
+          const { result } = renderHook(() => useDogsStore());
+          result.current.dogPagination = mockDogPagination;
+
+          await act(
+            async () =>
+              await result.current.api.searchDogs({
+                pageOption: PageOptions.Next,
+              })
+          );
+
+          expect(setupAxios().get).toHaveBeenCalledWith(
+            result.current.dogPagination.next,
+            { params: {} }
+          );
+        });
+
+        it("Uses the previous page in the search result", async () => {
+          vi.mocked(setupAxios().get).mockResolvedValue({
+            data: mockDogPagination,
+          });
+          const { result } = renderHook(() => useDogsStore());
+          result.current.dogPagination = mockDogPagination;
+
+          await act(
+            async () =>
+              await result.current.api.searchDogs({
+                pageOption: PageOptions.Previous,
+              })
+          );
+
+          expect(setupAxios().get).toHaveBeenCalledWith(
+            mockDogPagination.prev,
+            { params: {} }
+          );
+        });
+
+        it("Uses the default API url if no next page is found", async () => {
+          const noNextMockDogPagination: SearchDogsResult = {
+            resultIds: mockDogPagination.resultIds,
+            total: mockDogPagination.total,
+            prev: mockDogPagination.prev,
+          };
+          vi.mocked(setupAxios().get).mockResolvedValue({
+            data: mockDogPagination,
+          });
+          const { result } = renderHook(() => useDogsStore());
+          result.current.dogPagination = noNextMockDogPagination;
+
+          await act(
+            async () =>
+              await result.current.api.searchDogs({
+                pageOption: PageOptions.Next,
+              })
+          );
+
+          expect(setupAxios().get).toHaveBeenCalledWith("/dogs/search", {
+            params: {},
+          });
+        });
+
+        it("Uses the default API url if no previous page is found", async () => {
+          const noNextMockDogPagination: SearchDogsResult = {
+            resultIds: mockDogPagination.resultIds,
+            total: mockDogPagination.total,
+            next: mockDogPagination.next,
+          };
+          vi.mocked(setupAxios().get).mockResolvedValue({
+            data: mockDogPagination,
+          });
+          const { result } = renderHook(() => useDogsStore());
+          result.current.dogPagination = noNextMockDogPagination;
+
+          await act(
+            async () =>
+              await result.current.api.searchDogs({
+                pageOption: PageOptions.Previous,
+              })
+          );
+
+          expect(setupAxios().get).toHaveBeenCalledWith("/dogs/search", {
+            params: {},
+          });
+        });
+      });
+
+      describe("Uses both pageOption and queryParams if any are given", () => {
+        it("Uses both", async () => {
+          vi.mocked(setupAxios().get).mockResolvedValue({
+            data: mockDogPagination,
+          });
+          const { result } = renderHook(() => useDogsStore());
+          result.current.dogPagination = mockDogPagination;
+
+          await act(
+            async () =>
+              await result.current.api.searchDogs({
+                queryParams: {
+                  breeds: mockQueryParams.breeds,
+                  ageMax: mockQueryParams.ageMax,
+                },
+                pageOption: PageOptions.Next,
+              })
+          );
+
+          expect(setupAxios().get).toHaveBeenCalledWith(
+            result.current.dogPagination.next,
+            {
+              params: {
+                breeds: mockQueryParams.breeds,
+                ageMax: mockQueryParams.ageMax,
+              },
+            }
+          );
+        });
+
+        it("queryParams override pageOptions", async () => {
+          vi.mocked(setupAxios().get).mockResolvedValue({
+            data: mockDogPagination,
+          });
+          const { result } = renderHook(() => useDogsStore());
+          result.current.dogPagination = mockDogPagination;
+
+          await act(
+            async () =>
+              await result.current.api.searchDogs({
+                queryParams: {
+                  size: mockQueryParams.size,
+                },
+                pageOption: PageOptions.Next,
+              })
+          );
+
+          expect(setupAxios().get).toHaveBeenCalledWith(
+            result.current.dogPagination.next,
+            {
+              params: {
+                size: mockQueryParams.size,
+              },
+            }
+          );
         });
       });
 
@@ -408,7 +571,7 @@ describe("useDogsStore", () => {
         const { result } = renderHook(() => useDogsStore());
 
         const res = await act(
-          async () => await result.current.api.searchDogs()
+          async () => await result.current.api.searchDogs({})
         );
 
         expect(res).toBe(mockDogPagination);
@@ -420,7 +583,7 @@ describe("useDogsStore", () => {
         result.current.dogPagination = mockDogPagination;
 
         const res = await act(
-          async () => await result.current.api.searchDogs()
+          async () => await result.current.api.searchDogs({})
         );
 
         expect(res).toBe(initialState.dogPagination);
