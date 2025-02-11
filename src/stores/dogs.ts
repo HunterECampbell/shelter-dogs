@@ -16,6 +16,7 @@ export interface DogStoreActions {
   addFavoriteDog: (dog: Dog) => void;
   checkIfDogIsFavorite: (dogID: Dog["id"]) => boolean;
   removeFavoriteDog: (dogID: Dog["id"]) => void;
+  resetFavoriteDogs: () => void;
   retrieveLocationForZipCode: (
     zipCode: Dog["zip_code"]
   ) => DogLocation | Dog["zip_code"];
@@ -64,6 +65,8 @@ export const useDogsStore = create<
         (favoriteDog) => favoriteDog.id !== dogID
       ),
     })),
+  resetFavoriteDogs: () =>
+    set(() => ({ favoriteDogs: initialState.favoriteDogs })),
   retrieveLocationForZipCode: (
     zipCode: Dog["zip_code"]
   ): DogLocation | Dog["zip_code"] => {

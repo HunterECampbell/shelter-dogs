@@ -72,6 +72,15 @@ describe("useDogsStore", () => {
       expect(result.current.favoriteDogs).toEqual([mockDogs[1]]);
     });
 
+    it("#resetFavoriteDogs resets #state.favoriteDogs back to #initialState.favoriteDogs", () => {
+      const { result } = renderHook(() => useDogsStore());
+      result.current.favoriteDogs = mockDogs;
+
+      act(() => result.current.resetFavoriteDogs());
+
+      expect(result.current.favoriteDogs).toEqual(initialState.favoriteDogs);
+    });
+
     describe("#retrieveLocationForZipCode", () => {
       it("Returns the location for a given zip code", async () => {
         const { result } = renderHook(() => useDogsStore());
