@@ -167,7 +167,8 @@ const FlipWrapper = styled(FlipWrapperBefore)<{ $isFavorite: boolean }>`
         ? css`
             box-shadow: 0px 0px 16px 4px var(--cream),
               0px 0px 24px 4px rgba(230, 206, 67, 0.9),
-              0px 0px 32px 8px rgba(204, 176, 30, 0.9), 0px 0px 32px 24px white;
+              0px 0px 32px 8px rgba(204, 176, 30, 0.9),
+              0px 0px 32px 24px var(--cream);
           `
         : css`
             transition: box-shadow 0.3s ease-in-out;
