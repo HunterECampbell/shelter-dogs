@@ -24,3 +24,22 @@ export const mockDogs: DogStoreState["dogs"] = [
     breed: "Test breed 2",
   },
 ];
+
+export const mockLocations: DogStoreState["dogLocations"] = [
+  {
+    zip_code: "00000",
+    latitude: 0,
+    longitude: 0,
+    city: "Test City",
+    state: "Test State",
+    county: "Test County",
+  },
+  {
+    zip_code: "00000",
+    latitude: 0,
+    longitude: 0,
+    city: "Test City 2",
+    state: "Test State 2",
+    county: "Test County 2",
+  },
+];

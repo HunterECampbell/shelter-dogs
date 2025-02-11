@@ -37,7 +37,7 @@ export async function handleResponse<T>(
     }
     createAlert({ message: message, type: AlertType.Error });
 
-    if ((e as { response: { status: number } }).response.status === 401) {
+    if ((e as { response: { status: number } })?.response?.status === 401) {
       setIsAuthenticated(false);
       window.location.replace(RouteOptions.Login);
     }

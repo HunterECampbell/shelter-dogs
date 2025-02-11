@@ -1,7 +1,7 @@
 import { act, renderHook } from "@testing-library/react";
 import { setupAxios } from "../../setupAxios";
 import { initialState, useDogsStore } from "../dogs";
-import { mockDogPagination, mockDogs } from "./mocks/dogsMocks";
+import { mockDogPagination, mockDogs, mockLocations } from "./mocks/dogsMocks";
 import {
   SearchDogsQueryParams,
   SearchDogsSortDirection,
@@ -23,12 +23,21 @@ describe("useDogsStore", () => {
     it("Returns the initial state", () => {
       const { result } = renderHook(() => useDogsStore());
 
+      expect(result.current.dogLocations).toBe(initialState.dogLocations);
       expect(result.current.dogPagination).toBe(initialState.dogPagination);
       expect(result.current.dogs).toBe(initialState.dogs);
     });
   });
 
   describe("#actions", () => {
+    it("#setDogLocations sets #state.dogLocations", () => {
+      const { result } = renderHook(() => useDogsStore());
+
+      act(() => result.current.setDogLocations(mockLocations));
+
+      expect(result.current.dogLocations).toEqual(mockLocations);
+    });
+
     it("#setDogPagination sets #state.dogIDs", () => {
       const { result } = renderHook(() => useDogsStore());
 
@@ -49,7 +58,7 @@ describe("useDogsStore", () => {
   describe("#api", () => {
     describe("#getDogsFromIDs", () => {
       it("Calls the correct POST endpoint", async () => {
-        vi.mocked(setupAxios().post).mockResolvedValue({ status: 200 });
+        vi.mocked(setupAxios().post).mockResolvedValue({ data: mockDogs });
         const { result } = renderHook(() => useDogsStore());
 
         await act(
@@ -89,9 +98,64 @@ describe("useDogsStore", () => {
       });
     });
 
+    describe("#getLocationsFromDogZipCodes", () => {
+      it("Calls the correct POST endpoint", async () => {
+        vi.mocked(setupAxios().post).mockResolvedValue({ data: mockLocations });
+        const { result } = renderHook(() => useDogsStore());
+        result.current.dogs = mockDogs;
+        const dogZipCodes = result.current.dogs.map((dog) => dog.zip_code);
+
+        await act(
+          async () => await result.current.api.getLocationsFromDogZipCodes()
+        );
+
+        expect(setupAxios().post).toHaveBeenCalledWith(
+          "/locations",
+          dogZipCodes
+        );
+      });
+
+      it("Returns dog locations on success", async () => {
+        vi.mocked(setupAxios().post).mockResolvedValue({ data: mockLocations });
+        const { result } = renderHook(() => useDogsStore());
+        result.current.dogs = mockDogs;
+
+        const res = await act(
+          async () => await result.current.api.getLocationsFromDogZipCodes()
+        );
+
+        expect(res).toBe(mockLocations);
+      });
+
+      it("Returns #initialState.dogLocations if #state.dogs is empty", async () => {
+        vi.mocked(setupAxios().post).mockRejectedValue({ data: [] });
+        const { result } = renderHook(() => useDogsStore());
+        result.current.dogs = [];
+
+        const res = await act(
+          async () => await result.current.api.getLocationsFromDogZipCodes()
+        );
+
+        expect(res).toBe(initialState.dogLocations);
+      });
+
+      it("Returns #initialState.dogLocations on failure", async () => {
+        vi.mocked(setupAxios().post).mockRejectedValue({ status: 400 });
+        const { result } = renderHook(() => useDogsStore());
+
+        const res = await act(
+          async () => await result.current.api.getLocationsFromDogZipCodes()
+        );
+
+        expect(res).toBe(initialState.dogLocations);
+      });
+    });
+
     describe("#searchDogs", () => {
       it("Calls the correct GET endpoint", async () => {
-        vi.mocked(setupAxios().get).mockResolvedValue({ status: 200 });
+        vi.mocked(setupAxios().get).mockResolvedValue({
+          data: mockDogPagination,
+        });
         const { result } = renderHook(() => useDogsStore());
 
         await act(async () => await result.current.api.searchDogs());
@@ -113,7 +177,9 @@ describe("useDogsStore", () => {
         };
 
         it("Uses a single value in the search result", async () => {
-          vi.mocked(setupAxios().get).mockResolvedValue({ status: 200 });
+          vi.mocked(setupAxios().get).mockResolvedValue({
+            data: mockDogPagination,
+          });
           const { result } = renderHook(() => useDogsStore());
 
           await act(
@@ -131,7 +197,9 @@ describe("useDogsStore", () => {
         });
 
         it("Uses multiple values in the search result", async () => {
-          vi.mocked(setupAxios().get).mockResolvedValue({ status: 200 });
+          vi.mocked(setupAxios().get).mockResolvedValue({
+            data: mockDogPagination,
+          });
           const { result } = renderHook(() => useDogsStore());
 
           await act(
@@ -151,7 +219,9 @@ describe("useDogsStore", () => {
         });
 
         it("Uses all values in the search result", async () => {
-          vi.mocked(setupAxios().get).mockResolvedValue({ status: 200 });
+          vi.mocked(setupAxios().get).mockResolvedValue({
+            data: mockDogPagination,
+          });
           const { result } = renderHook(() => useDogsStore());
 
           await act(
