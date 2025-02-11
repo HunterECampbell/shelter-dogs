@@ -1,6 +1,8 @@
 import { v4 as uuidV4 } from "uuid";
 import { DogStoreState } from "../../dogs";
 
+export const mockBreeds = ["Test breed", "Test breed 2", "Test breed 3"];
+
 export const mockDogPagination: DogStoreState["dogPagination"] = {
   resultIds: [uuidV4(), uuidV4(), uuidV4()],
   total: 3,

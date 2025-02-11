@@ -6,6 +6,7 @@ import { Dog, DogLocation } from "../globalTypes";
 import { SearchDogsQueryParams, SearchDogsResult } from "./types/apiTypes";
 
 export interface DogStoreState {
+  allBreeds: Dog["breed"][];
   dogLocations: DogLocation[];
   dogPagination: SearchDogsResult;
   dogs: Dog[];
@@ -20,6 +21,7 @@ export interface DogStoreActions {
   retrieveLocationForZipCode: (
     zipCode: Dog["zip_code"]
   ) => DogLocation | Dog["zip_code"];
+  setAllBreeds: (allBreeds: Dog["breed"][]) => void;
   setDogLocations: (dogLocations: DogStoreState["dogLocations"]) => void;
   setDogPagination: (
     dogPaginationResult: DogStoreState["dogPagination"]
@@ -29,6 +31,7 @@ export interface DogStoreActions {
 
 export interface DogStoreAPIs {
   api: {
+    getAllBreeds: () => Promise<Dog["breed"]>;
     getDogsFromIDs: (
       dogIDs: DogStoreState["dogPagination"]["resultIds"]
     ) => Promise<DogStoreState["dogs"]>;
@@ -40,6 +43,7 @@ export interface DogStoreAPIs {
 }
 
 export const initialState: DogStoreState = {
+  allBreeds: [],
   dogLocations: [],
   dogPagination: {
     resultIds: [],
@@ -77,12 +81,26 @@ export const useDogsStore = create<
 
     return dogLocation || zipCode;
   },
+  setAllBreeds: (allBreeds: Dog["breed"][]) => set(() => ({ allBreeds })),
   setDogLocations: (dogLocations: DogStoreState["dogLocations"]) =>
     set(() => ({ dogLocations })),
   setDogPagination: (dogPaginationResult: DogStoreState["dogPagination"]) =>
     set(() => ({ dogPagination: dogPaginationResult })),
   setDogs: (dogs: Dog[]) => set(() => ({ dogs })),
   api: {
+    getAllBreeds: async () => {
+      try {
+        const res = await handleResponse(
+          async () => await setupAxios().get("/dogs/breeds"),
+          { showAlert: false }
+        );
+
+        return res.data;
+      } catch (error) {
+        console.error("Retrieving Dog Breeds Failed -", error);
+        return initialState.allBreeds;
+      }
+    },
     getDogsFromIDs: async (
       dogIDs: DogStoreState["dogPagination"]["resultIds"]
     ): Promise<DogStoreState["dogs"]> => {

@@ -1,7 +1,12 @@
 import { act, renderHook } from "@testing-library/react";
 import { setupAxios } from "../../setupAxios";
 import { initialState, useDogsStore } from "../dogs";
-import { mockDogPagination, mockDogs, mockLocations } from "./mocks/dogsMocks";
+import {
+  mockBreeds,
+  mockDogPagination,
+  mockDogs,
+  mockLocations,
+} from "./mocks/dogsMocks";
 import {
   SearchDogsQueryParams,
   SearchDogsSortDirection,
@@ -23,6 +28,7 @@ describe("useDogsStore", () => {
     it("Returns the initial state", () => {
       const { result } = renderHook(() => useDogsStore());
 
+      expect(result.current.allBreeds).toBe(initialState.allBreeds);
       expect(result.current.dogLocations).toBe(initialState.dogLocations);
       expect(result.current.dogPagination).toBe(initialState.dogPagination);
       expect(result.current.dogs).toBe(initialState.dogs);
@@ -106,6 +112,14 @@ describe("useDogsStore", () => {
       });
     });
 
+    it("#setAllBreeds sets #state.allBreeds", () => {
+      const { result } = renderHook(() => useDogsStore());
+
+      act(() => result.current.setAllBreeds(mockBreeds));
+
+      expect(result.current.allBreeds).toEqual(mockBreeds);
+    });
+
     it("#setDogLocations sets #state.dogLocations", () => {
       const { result } = renderHook(() => useDogsStore());
 
@@ -132,6 +146,39 @@ describe("useDogsStore", () => {
   });
 
   describe("#api", () => {
+    describe("#getAllBreeds", () => {
+      it("Calls the correct GET endpoint", async () => {
+        vi.mocked(setupAxios().get).mockResolvedValue({ data: mockBreeds });
+        const { result } = renderHook(() => useDogsStore());
+
+        await act(async () => await result.current.api.getAllBreeds());
+
+        expect(setupAxios().get).toHaveBeenCalledWith("/dogs/breeds");
+      });
+
+      it("Returns all dog breeds on success", async () => {
+        vi.mocked(setupAxios().get).mockResolvedValue({ data: mockBreeds });
+        const { result } = renderHook(() => useDogsStore());
+
+        const res = await act(
+          async () => await result.current.api.getAllBreeds()
+        );
+
+        expect(res).toBe(mockBreeds);
+      });
+
+      it("Returns #initialState.allBreeds on failure", async () => {
+        vi.mocked(setupAxios().get).mockRejectedValue({ status: 400 });
+        const { result } = renderHook(() => useDogsStore());
+
+        const res = await act(
+          async () => await result.current.api.getAllBreeds()
+        );
+
+        expect(res).toBe(initialState.allBreeds);
+      });
+    });
+
     describe("#getDogsFromIDs", () => {
       it("Calls the correct POST endpoint", async () => {
         vi.mocked(setupAxios().post).mockResolvedValue({ data: mockDogs });
