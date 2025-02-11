@@ -29,12 +29,6 @@ const Header = ({ showLogoutButton }: { showLogoutButton?: boolean }) => {
 
   return (
     <HeaderWrapper>
-      <CenterArea>
-        <IconWrapper>
-          <Icon />
-        </IconWrapper>
-      </CenterArea>
-
       {showLogoutButton && (
         <ButtonWrapper>
           <CustomButton
@@ -44,6 +38,12 @@ const Header = ({ showLogoutButton }: { showLogoutButton?: boolean }) => {
           />
         </ButtonWrapper>
       )}
+
+      <CenterArea>
+        <IconWrapper>
+          <Icon />
+        </IconWrapper>
+      </CenterArea>
     </HeaderWrapper>
   );
 };
@@ -84,8 +84,8 @@ const Icon = styled(PugIcon)`
 `;
 
 const ButtonWrapper = styled.div`
-  align-self: flex-end;
-  margin-right: 16px;
+  align-self: flex-start;
+  margin-left: 16px;
 `;
 
 export default Header;

@@ -160,6 +160,7 @@ const CardBack = styled(FlipSide)`
 const ItemArea = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   padding: 16px;
   padding-bottom: 0;
 `;
