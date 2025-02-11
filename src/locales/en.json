@@ -22,6 +22,10 @@
       "labels": {
         "breed": "Breed",
         "location": "Location"
+      },
+      "buttons": {
+        "favorite": "Favorite",
+        "unfavorite": "Unfavorite"
       }
     },
     "errors": {

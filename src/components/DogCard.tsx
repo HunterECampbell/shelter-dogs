@@ -5,13 +5,19 @@ import { Dog } from "../globalTypes";
 import { useDogsStore } from "../stores/dogs";
 
 import Box from "@mui/material/Box";
+import CustomButton from "./generalComponents/CustomButton";
 import Divider from "@mui/material/Divider";
 import PetsIcon from "@mui/icons-material/Pets";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
 
 const DogCard = ({ dogData }: { dogData: Dog }) => {
   const { t } = useTranslation();
-  const { retrieveLocationForZipCode } = useDogsStore();
+  const {
+    addFavoriteDog,
+    checkIfDogIsFavorite,
+    removeFavoriteDog,
+    retrieveLocationForZipCode,
+  } = useDogsStore();
 
   const getLocationString = (): string => {
     const location = retrieveLocationForZipCode(dogData.zip_code);
@@ -35,31 +41,48 @@ const DogCard = ({ dogData }: { dogData: Dog }) => {
 
           <Divider sx={{ borderBottomWidth: 2 }} />
 
-          <ItemArea>
-            <PetsIcon
-              color="secondary"
-              sx={{ fontSize: "calc(40 / 16 * 1rem)" }}
-            />
-            <ItemDetailsArea>
-              <ItemDetailLabel>
-                {t("dashboard.dog_card.labels.breed")}
-              </ItemDetailLabel>
-              <ItemDetailValue>{dogData.breed}</ItemDetailValue>
-            </ItemDetailsArea>
-          </ItemArea>
+          <DetailsArea>
+            <ItemArea>
+              <PetsIcon
+                color="secondary"
+                sx={{ fontSize: "calc(40 / 16 * 1rem)" }}
+              />
+              <ItemDetailsArea>
+                <ItemDetailLabel>
+                  {t("dashboard.dog_card.labels.breed")}
+                </ItemDetailLabel>
+                <ItemDetailValue>{dogData.breed}</ItemDetailValue>
+              </ItemDetailsArea>
+            </ItemArea>
 
-          <ItemArea>
-            <FmdGoodIcon
-              color="secondary"
-              sx={{ fontSize: "calc(40 / 16 * 1rem)" }}
+            <ItemArea>
+              <FmdGoodIcon
+                color="secondary"
+                sx={{ fontSize: "calc(40 / 16 * 1rem)" }}
+              />
+              <ItemDetailsArea>
+                <ItemDetailLabel>
+                  {t("dashboard.dog_card.labels.location")}
+                </ItemDetailLabel>
+                <ItemDetailValue>{getLocationString()}</ItemDetailValue>
+              </ItemDetailsArea>
+            </ItemArea>
+          </DetailsArea>
+
+          <FavoriteButtonArea>
+            <CustomButton
+              label={
+                checkIfDogIsFavorite(dogData.id)
+                  ? t("dashboard.dog_card.buttons.unfavorite")
+                  : t("dashboard.dog_card.buttons.favorite")
+              }
+              onClick={
+                checkIfDogIsFavorite(dogData.id)
+                  ? () => removeFavoriteDog(dogData.id)
+                  : () => addFavoriteDog(dogData)
+              }
             />
-            <ItemDetailsArea>
-              <ItemDetailLabel>
-                {t("dashboard.dog_card.labels.location")}
-              </ItemDetailLabel>
-              <ItemDetailValue>{getLocationString()}</ItemDetailValue>
-            </ItemDetailsArea>
-          </ItemArea>
+          </FavoriteButtonArea>
         </CardBack>
       </FlipWrapper>
     </DogCardArea>
@@ -67,7 +90,7 @@ const DogCard = ({ dogData }: { dogData: Dog }) => {
 };
 
 const DogCardArea = muiStyled(Box)`
-  --size: 250px;
+  --size: 275px;
 
   height: var(--size);
   max-height: var(--size);
@@ -155,6 +178,13 @@ const DogNameBack = styled(DogName)`
 const CardBack = styled(FlipSide)`
   transform: rotateY(-180deg);
   background: var(--pug-tan);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+`;
+
+const DetailsArea = styled.div`
+  flex-grow: 1;
 `;
 
 const ItemArea = styled.div`
@@ -183,6 +213,16 @@ const ItemDetailValue = styled(TruncatedText)`
   font-size: calc(20 / 16 * 1rem);
   text-align: left !important;
   text-wrap: wrap;
+`;
+
+const FavoriteButtonArea = styled.div`
+  height: 64px;
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  position: relative;
+  bottom: 0;
 `;
 
 export default DogCard;

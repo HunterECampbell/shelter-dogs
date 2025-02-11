@@ -26,10 +26,52 @@ describe("useDogsStore", () => {
       expect(result.current.dogLocations).toBe(initialState.dogLocations);
       expect(result.current.dogPagination).toBe(initialState.dogPagination);
       expect(result.current.dogs).toBe(initialState.dogs);
+      expect(result.current.favoriteDogs).toBe(initialState.favoriteDogs);
     });
   });
 
   describe("#actions", () => {
+    it("#addFavoriteDog adds a dog to #state.favoriteDogs", () => {
+      const { result } = renderHook(() => useDogsStore());
+
+      act(() => result.current.addFavoriteDog(mockDogs[0]));
+
+      expect(result.current.favoriteDogs).toEqual([mockDogs[0]]);
+    });
+
+    describe("#checkIfDogIsFavorite", () => {
+      it("Returns true if the dog is a favorite", async () => {
+        const { result } = renderHook(() => useDogsStore());
+        result.current.favoriteDogs = mockDogs;
+
+        const res = await act(() =>
+          result.current.checkIfDogIsFavorite(mockDogs[0].id)
+        );
+
+        expect(res).toBe(true);
+      });
+
+      it("Returns false if the dog is not a favorite", async () => {
+        const { result } = renderHook(() => useDogsStore());
+        result.current.favoriteDogs = mockDogs;
+
+        const res = await act(() =>
+          result.current.checkIfDogIsFavorite("fake id")
+        );
+
+        expect(res).toBe(false);
+      });
+    });
+
+    it("#removeFavoriteDog removes the matching dog from #state.favoriteDogs", () => {
+      const { result } = renderHook(() => useDogsStore());
+      result.current.favoriteDogs = mockDogs;
+
+      act(() => result.current.removeFavoriteDog(mockDogs[0].id));
+
+      expect(result.current.favoriteDogs).toEqual([mockDogs[1]]);
+    });
+
     describe("#retrieveLocationForZipCode", () => {
       it("Returns the location for a given zip code", async () => {
         const { result } = renderHook(() => useDogsStore());

@@ -9,9 +9,13 @@ export interface DogStoreState {
   dogLocations: DogLocation[];
   dogPagination: SearchDogsResult;
   dogs: Dog[];
+  favoriteDogs: Dog[];
 }
 
 export interface DogStoreActions {
+  addFavoriteDog: (dog: Dog) => void;
+  checkIfDogIsFavorite: (dogID: Dog["id"]) => boolean;
+  removeFavoriteDog: (dogID: Dog["id"]) => void;
   retrieveLocationForZipCode: (
     zipCode: Dog["zip_code"]
   ) => DogLocation | Dog["zip_code"];
@@ -43,12 +47,23 @@ export const initialState: DogStoreState = {
     prev: "",
   },
   dogs: [],
+  favoriteDogs: [],
 };
 
 export const useDogsStore = create<
   DogStoreState & DogStoreActions & DogStoreAPIs
 >((set, get) => ({
   ...initialState,
+  addFavoriteDog: (dog: Dog) =>
+    set(() => ({ favoriteDogs: [...get().favoriteDogs, dog] })),
+  checkIfDogIsFavorite: (dogID: Dog["id"]) =>
+    get().favoriteDogs.some((dog) => dog.id === dogID),
+  removeFavoriteDog: (dogID: Dog["id"]) =>
+    set(() => ({
+      favoriteDogs: get().favoriteDogs.filter(
+        (favoriteDog) => favoriteDog.id !== dogID
+      ),
+    })),
   retrieveLocationForZipCode: (
     zipCode: Dog["zip_code"]
   ): DogLocation | Dog["zip_code"] => {
