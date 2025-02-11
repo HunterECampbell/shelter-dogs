@@ -5,10 +5,11 @@ import { SearchDogsQueryParams } from "../stores/types/apiTypes";
 
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
+import DogCard from "../components/DogCard";
 import Header from "../components/Header";
 
 const AvailableDogsPage = () => {
-  const { api, setDogPagination, setDogs } = useDogsStore();
+  const { api, setDogPagination, setDogs, dogs } = useDogsStore();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -39,6 +40,12 @@ const AvailableDogsPage = () => {
     <MainWrapper>
       <Header showLogoutButton={true} />
 
+      <DogsArea>
+        {dogs.map((dogData) => (
+          <DogCard key={dogData.id} dogData={dogData} />
+        ))}
+      </DogsArea>
+
       <Backdrop open={isLoading}>
         <CircularProgress color="pugTan" />
       </Backdrop>
@@ -49,6 +56,24 @@ const AvailableDogsPage = () => {
 const MainWrapper = styled.div`
   height: 100vh;
   width: 100vw;
+  // display: flex;
+  // flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+`;
+
+const DogsArea = styled.div`
+  --header-height: 64px;
+
+  margin-top: var(--header-height);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  overflow-y: auto;
+  padding: 24px 0;
 `;
 
 export default AvailableDogsPage;

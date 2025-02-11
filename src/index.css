@@ -35,3 +35,18 @@ h6,
 p {
   margin: 0;
 }
+
+::-webkit-scrollbar {
+  --size: 10px;
+
+  width: var(--size);
+  height: var(--size);
+}
+::-webkit-scrollbar-track {
+  background: var(--pug-tan);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--pug-medium-dark);
+  border-radius: 8px;
+}

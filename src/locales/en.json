@@ -18,6 +18,12 @@
     }
   },
   "dashboard": {
+    "dog_card": {
+      "labels": {
+        "breed": "Breed",
+        "location": "Location"
+      }
+    },
     "errors": {
       "get_dogs_failed": "There was a problem retrieving the dogs.",
       "search_dogs_failed": "There was a problem searching for the dogs."
