@@ -35,7 +35,7 @@ export interface DogStoreActions {
 
 export interface DogStoreAPIs {
   api: {
-    getAllBreeds: () => Promise<Dog["breed"]>;
+    getAllBreeds: () => Promise<Dog["breed"][]>;
     getDogMatch: (favoriteDogIDs: Dog["id"][]) => Promise<GetDogMatchResult>;
     getDogsFromIDs: (
       dogIDs: DogStoreState["dogPagination"]["resultIds"]
@@ -95,7 +95,7 @@ export const useDogsStore = create<
   setDogs: (dogs: Dog[]) => set(() => ({ dogs })),
 
   api: {
-    getAllBreeds: async () => {
+    getAllBreeds: async (): Promise<Dog["breed"][]> => {
       try {
         const res = await handleResponse(
           async () => await setupAxios().get("/dogs/breeds"),

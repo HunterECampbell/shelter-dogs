@@ -9,8 +9,14 @@ import DogCard from "../components/DogCard";
 import Header from "../components/Header";
 
 const AvailableDogsPage = () => {
-  const { api, setDogLocations, setDogPagination, setDogs, dogs } =
-    useDogsStore();
+  const {
+    api,
+    dogs,
+    setAllBreeds,
+    setDogLocations,
+    setDogPagination,
+    setDogs,
+  } = useDogsStore();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -36,9 +42,21 @@ const AvailableDogsPage = () => {
     []
   );
 
+  const getAllBreeds = useCallback(async () => {
+    try {
+      setIsLoading(true);
+
+      const allBreeds = await api.getAllBreeds();
+      setAllBreeds(allBreeds);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [api, setAllBreeds]);
+
   useEffect(() => {
+    getAllBreeds();
     fetchDogs();
-  }, [fetchDogs]);
+  }, [getAllBreeds, fetchDogs]);
 
   const calculateNumCols = () => {
     const dogCardSize = 275;
