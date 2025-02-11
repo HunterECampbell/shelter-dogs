@@ -6,6 +6,7 @@ import { SearchDogsQueryParams } from "../stores/types/apiTypes";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import DogCard from "../components/DogCard";
+import GeneralPugBackground from "../components/GeneralPugBackground";
 import Header from "../components/Header";
 
 const AvailableDogsPage = () => {
@@ -77,6 +78,8 @@ const AvailableDogsPage = () => {
 
   return (
     <MainWrapper>
+      <GeneralPugBackground />
+
       <Header showLogoutButton={true} />
 
       <DogsArea $numCols={numCols} $numItems={dogs.length}>
