@@ -34,6 +34,9 @@ const DogFilterAccordion = () => {
   const handleExpansion = (_: React.SyntheticEvent, expanded: boolean) => {
     setExpanded(expanded);
   };
+  const handleZipCodeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterQueryParams({ zipCodes: [event.target.value] });
+  };
 
   return (
     <StyledAccordion expanded={expanded} onChange={handleExpansion}>
@@ -44,19 +47,27 @@ const DogFilterAccordion = () => {
 
       <StyledAccordionDetails $expanded={expanded}>
         <DogSorter />
-        <StyledAutocomplete
-          blurOnSelect
-          clearOnEscape
-          multiple
-          options={allBreeds}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label={t("dashboard.filtering.labels.breed")}
-            />
-          )}
-          onChange={handleBreedSelection}
-        />
+
+        <InputWrapper>
+          <StyledAutocomplete
+            blurOnSelect
+            clearOnEscape
+            multiple
+            options={allBreeds}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={t("dashboard.filtering.labels.breed")}
+              />
+            )}
+            onChange={handleBreedSelection}
+          />
+          <StyledTextField
+            label={t("dashboard.filtering.labels.zip_code")}
+            type="number"
+            onChange={handleZipCodeValue}
+          />
+        </InputWrapper>
       </StyledAccordionDetails>
     </StyledAccordion>
   );
@@ -95,9 +106,30 @@ const FilterText = styled.p`
   color: var(--pug-nearly-dark);
 `;
 
+const InputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: flex-end;
+`;
+
 const StyledAutocomplete = muiStyled(Autocomplete)`
   width: 275px;
-  color: var(--pug-nearly-dark);
+    border-color: var(--pug-nearly-dark);
+
+  * {
+    border-color: var(--pug-nearly-dark);
+    color: var(--pug-nearly-dark);
+  }
+`;
+
+const StyledTextField = muiStyled(TextField)`
+  width: 275px;
+
+  * {
+    border-color: var(--pug-nearly-dark);
+    color: var(--pug-nearly-dark);
+  }
 `;
 
 export default DogFilterAccordion;

@@ -33,7 +33,8 @@
         "name": "Name",
         "age": "Age",
         "ascending": "Ascending",
-        "descending": "Descending"
+        "descending": "Descending",
+        "zip_code": "Zip Code"
       }
     },
     "dog_card": {
