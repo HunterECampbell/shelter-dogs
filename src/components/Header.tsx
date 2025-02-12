@@ -29,15 +29,18 @@ const Header = ({ showLogoutButton }: { showLogoutButton?: boolean }) => {
 
   return (
     <HeaderWrapper>
-      {showLogoutButton && (
-        <ButtonWrapper>
-          <CustomButton
-            label={t("login.buttons.logout")}
-            loading={loggingOut}
-            onClick={logout}
-          />
-        </ButtonWrapper>
-      )}
+      <LeftArea>
+        {showLogoutButton && (
+          <ButtonWrapper>
+            <CustomButton
+              label={t("login.buttons.logout")}
+              loading={loggingOut}
+              onClick={logout}
+            />
+          </ButtonWrapper>
+        )}
+        <CompanyName>{t("company_name")}</CompanyName>
+      </LeftArea>
 
       <CenterArea>
         <IconWrapper>
@@ -53,6 +56,29 @@ const HeaderWrapper = muiStyled(AppBar)`
   display: flex;
   align-items: center;
   height: calc(64 / 16 * 1rem);
+`;
+
+const LeftArea = styled.div`
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-self: flex-start;
+`;
+
+const ButtonWrapper = styled.div`
+  align-self: flex-start;
+  margin-left: 16px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+`;
+
+const CompanyName = styled.p`
+  font-size: calc(28 / 16 * 1rem);
+  font-weight: bold;
+  color: var(--pug-dark);
+  margin-left: 16px;
+  align-self: center;
 `;
 
 const CenterArea = styled.div`
@@ -81,14 +107,6 @@ const IconWrapper = styled.div`
 
 const Icon = styled(PugIcon)`
   width: 90%;
-`;
-
-const ButtonWrapper = styled.div`
-  align-self: flex-start;
-  margin-left: 16px;
-  height: 100%;
-  display: flex;
-  align-items: center;
 `;
 
 export default Header;
