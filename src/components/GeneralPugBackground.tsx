@@ -23,6 +23,7 @@ const Background = styled.div`
   right: 0;
   overflow: hidden;
   z-index: -1;
+  background: var(--cream);
 `;
 
 const InitialPugHead = styled(PugIcon)`

@@ -17,6 +17,7 @@ const Background = styled.div`
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+  background: var(--cream);
 `;
 
 export default AnimatedPugBackground;

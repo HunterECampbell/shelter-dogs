@@ -36,6 +36,10 @@ const DogCard = ({
     if (typeof location === "string") return location;
     return `${location.city}, ${location.state} ${location.zip_code}`;
   };
+  const getNameAndAgeText = (): string =>
+    `${dogData.name} • ${dogData.age} ${t(
+      "dashboard.dog_card.labels.years_abbreviation"
+    )}`;
   const updateFavorite = () => {
     if (isFavorite.current) {
       removeFavoriteDog(dogData.id);
@@ -52,7 +56,7 @@ const DogCard = ({
     <CardFront>
       <DogImage src={dogData.img} alt={dogData.name} />
       <NameArea>
-        <DogName>{dogData.name}</DogName>
+        <DogName>{getNameAndAgeText()}</DogName>
       </NameArea>
       {isFavorite.current && <StyledFavoriteIcon fontSize="large" />}
     </CardFront>
@@ -68,7 +72,10 @@ const DogCard = ({
           <MemoizedCardFront />
 
           <CardBack>
-            <DogNameBack>{dogData.name}</DogNameBack>
+            <DogNameAreaBack>
+              <DogNameBack>{getNameAndAgeText()}</DogNameBack>
+              {isFavorite.current && <StyledFavoriteIcon fontSize="large" />}
+            </DogNameAreaBack>
 
             <Divider sx={{ borderBottomWidth: 2 }} />
 
@@ -259,9 +266,15 @@ const DogName = styled(TruncatedText)`
   font-weight: bold;
 `;
 
+const DogNameAreaBack = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const DogNameBack = styled(DogName)`
   color: var(--pug-dark);
   padding: 16px;
+  width: 75%;
 `;
 
 const CardBack = styled(FlipSide)`

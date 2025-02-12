@@ -21,7 +21,8 @@
     "dog_card": {
       "labels": {
         "breed": "Breed",
-        "location": "Location"
+        "location": "Location",
+        "years_abbreviation": "yrs"
       },
       "buttons": {
         "favorite": "Favorite",
