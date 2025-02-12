@@ -8,6 +8,8 @@ import {
   PageOptions,
   SearchDogsQueryParams,
   SearchDogsResult,
+  SearchDogsSortDirection,
+  SearchDogsSortField,
 } from "./types/apiTypes";
 
 export interface DogStoreState {
@@ -16,12 +18,20 @@ export interface DogStoreState {
   dogPagination: SearchDogsResult;
   dogs: Dog[];
   favoriteDogs: Dog[];
+  filterQueryParams: SearchDogsQueryParams;
   matchedDog: Dog;
 }
 
 export interface DogStoreActions {
   addFavoriteDog: (dog: Dog) => void;
   checkIfDogIsFavorite: (dogID: Dog["id"]) => boolean;
+  getSortText: ({
+    sortOption,
+    sortDirection,
+  }: {
+    sortOption: SearchDogsSortField;
+    sortDirection: SearchDogsSortDirection;
+  }) => Exclude<SearchDogsQueryParams["sort"], undefined>;
   removeFavoriteDog: (dogID: Dog["id"]) => void;
   resetFavoriteDogs: () => void;
   retrieveLocationForZipCode: (
@@ -33,6 +43,7 @@ export interface DogStoreActions {
     dogPaginationResult: DogStoreState["dogPagination"]
   ) => void;
   setDogs: (dogs: DogStoreState["dogs"]) => void;
+  setFilterQueryParams: (queryParams: SearchDogsQueryParams) => void;
   setMatchedDog: (matchedDog: Dog) => void;
 }
 
@@ -65,6 +76,11 @@ export const initialState: DogStoreState = {
   },
   dogs: [],
   favoriteDogs: [],
+  filterQueryParams: {
+    from: 0,
+    size: 25,
+    sort: `${SearchDogsSortField.Breed}:${SearchDogsSortDirection.Ascending}`,
+  },
   matchedDog: {
     id: "",
     img: "",
@@ -84,6 +100,14 @@ export const useDogsStore = create<
     set(() => ({ favoriteDogs: [...get().favoriteDogs, dog] })),
   checkIfDogIsFavorite: (dogID: Dog["id"]) =>
     get().favoriteDogs.some((dog) => dog.id === dogID),
+  getSortText: ({
+    sortOption,
+    sortDirection,
+  }: {
+    sortOption: SearchDogsSortField;
+    sortDirection: SearchDogsSortDirection;
+  }): Exclude<SearchDogsQueryParams["sort"], undefined> =>
+    `${sortOption}:${sortDirection}`,
   removeFavoriteDog: (dogID: Dog["id"]) =>
     set(() => ({
       favoriteDogs: get().favoriteDogs.filter(
@@ -108,6 +132,10 @@ export const useDogsStore = create<
   setDogPagination: (dogPaginationResult: DogStoreState["dogPagination"]) =>
     set(() => ({ dogPagination: dogPaginationResult })),
   setDogs: (dogs: Dog[]) => set(() => ({ dogs })),
+  setFilterQueryParams: (queryParams: SearchDogsQueryParams) =>
+    set(() => ({
+      filterQueryParams: { ...get().filterQueryParams, ...queryParams },
+    })),
   setMatchedDog: (matchedDog: Dog) => set(() => ({ matchedDog })),
 
   api: {

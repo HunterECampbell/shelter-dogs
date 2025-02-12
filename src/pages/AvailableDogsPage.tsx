@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import DogCard from "../components/DogCard";
+import DogSearchAndFiltering from "../components/dogFiltering/DogSearchAndFiltering";
 import FindFavoritesDescription from "../components/FindFavoritesDescription";
 import GeneralPugBackground from "../components/GeneralPugBackground";
 import Header from "../components/Header";
@@ -17,7 +18,6 @@ const AvailableDogsPage = () => {
     api,
     dogPagination,
     dogs,
-    setAllBreeds,
     setDogLocations,
     setDogPagination,
     setDogs,
@@ -60,21 +60,9 @@ const AvailableDogsPage = () => {
     []
   );
 
-  const getAllBreeds = useCallback(async () => {
-    try {
-      setIsLoading(true);
-
-      const allBreeds = await api.getAllBreeds();
-      setAllBreeds(allBreeds);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [api, setAllBreeds]);
-
   useEffect(() => {
-    getAllBreeds();
     fetchDogs({});
-  }, [getAllBreeds, fetchDogs]);
+  }, [fetchDogs]);
 
   const calculateNumCols = () => {
     const dogCardSize = 275;
@@ -146,7 +134,9 @@ const AvailableDogsPage = () => {
     <MainWrapper>
       <GeneralPugBackground />
 
-      <Header showLogoutButton={true} />
+      <Header showLogoutButton />
+
+      <DogSearchAndFiltering />
 
       <DogsArea $numCols={numCols} $numItems={dogs.length}>
         <FindFavoritesDescription />
@@ -243,10 +233,7 @@ const DogsArea = styled.div<{
   $numCols: number;
   $numItems: number;
 }>`
-  --header-height: 64px;
-
   flex-grow: 1;
-  margin-top: var(--header-height);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

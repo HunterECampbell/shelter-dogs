@@ -25,6 +25,17 @@
         "find_my_match": "Find My Match!"
       }
     },
+    "filtering": {
+      "labels": {
+        "filter": "Filter",
+        "sort": "Sort",
+        "breed": "Breed",
+        "name": "Name",
+        "age": "Age",
+        "ascending": "Ascending",
+        "descending": "Descending"
+      }
+    },
     "dog_card": {
       "labels": {
         "breed": "Breed",

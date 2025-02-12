@@ -64,7 +64,7 @@ const LoginCard = () => {
         <InputArea>
           <TextField
             color="secondary"
-            fullWidth={true}
+            fullWidth
             label={t("login.inputs.name")}
             variant="outlined"
             onChange={handleSetName}
@@ -73,7 +73,7 @@ const LoginCard = () => {
           <TextField
             color="secondary"
             error={emailError && emailInputHasBlurred}
-            fullWidth={true}
+            fullWidth
             helperText={
               emailError && emailInputHasBlurred ? t("login.errors.email") : ""
             }

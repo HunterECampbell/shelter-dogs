@@ -46,7 +46,7 @@ const MatchedDogCard = () => {
       <MatchedDogArea sx={{ boxShadow: 5 }}>
         <Header>{t("match_page.header")}</Header>
 
-        <DogCard dogData={matchedDog} hideFavoriteButton={true} />
+        <DogCard dogData={matchedDog} hideFavoriteButton />
       </MatchedDogArea>
     </MatchDogWrapper>
   );

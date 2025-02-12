@@ -7,6 +7,7 @@ declare module "@mui/material/styles" {
     pugNearlyDark: Palette["primary"];
     pugDark: Palette["primary"];
     pugTongue: Palette["primary"];
+    cream: Palette["primary"];
   }
   interface PaletteOptions {
     pugTan?: PaletteOptions["primary"];
@@ -14,18 +15,10 @@ declare module "@mui/material/styles" {
     pugNearlyDark?: PaletteOptions["primary"];
     pugDark?: PaletteOptions["primary"];
     pugTongue?: PaletteOptions["primary"];
+    cream?: PaletteOptions["primary"];
   }
 }
 
-declare module "@mui/material/CircularProgress" {
-  interface CircularProgressPropsColorOverrides {
-    pugTan: true;
-    pugMediumDark: true;
-    pugNearlyDark: true;
-    pugDark: true;
-    pugTongue: true;
-  }
-}
 declare module "@mui/material/Card" {
   interface CardPropsColorOverrides {
     pugTan: true;
@@ -33,6 +26,17 @@ declare module "@mui/material/Card" {
     pugNearlyDark: true;
     pugDark: true;
     pugTongue: true;
+    cream: true;
+  }
+}
+declare module "@mui/material/CircularProgress" {
+  interface CircularProgressPropsColorOverrides {
+    pugTan: true;
+    pugMediumDark: true;
+    pugNearlyDark: true;
+    pugDark: true;
+    pugTongue: true;
+    cream: true;
   }
 }
 
@@ -64,6 +68,9 @@ const customTheme = createTheme({
     },
     pugTongue: {
       main: "#df9aa4",
+    },
+    cream: {
+      main: "#f0f2f0",
     },
   },
   components: {

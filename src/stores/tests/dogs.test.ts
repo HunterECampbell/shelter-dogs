@@ -38,12 +38,15 @@ describe("useDogsStore", () => {
     it("Returns the initial state", () => {
       const { result } = renderHook(() => useDogsStore());
 
-      expect(result.current.allBreeds).toBe(initialState.allBreeds);
-      expect(result.current.dogLocations).toBe(initialState.dogLocations);
-      expect(result.current.dogPagination).toBe(initialState.dogPagination);
-      expect(result.current.dogs).toBe(initialState.dogs);
-      expect(result.current.favoriteDogs).toBe(initialState.favoriteDogs);
-      expect(result.current.matchedDog).toBe(initialState.matchedDog);
+      expect(result.current.allBreeds).toEqual(initialState.allBreeds);
+      expect(result.current.dogLocations).toEqual(initialState.dogLocations);
+      expect(result.current.dogPagination).toEqual(initialState.dogPagination);
+      expect(result.current.dogs).toEqual(initialState.dogs);
+      expect(result.current.favoriteDogs).toEqual(initialState.favoriteDogs);
+      expect(result.current.filterQueryParams).toEqual(
+        initialState.filterQueryParams
+      );
+      expect(result.current.matchedDog).toEqual(initialState.matchedDog);
     });
   });
 
@@ -78,6 +81,19 @@ describe("useDogsStore", () => {
 
         expect(res).toBe(false);
       });
+    });
+
+    it("#getSortText returns the correct sort text", async () => {
+      const sortOption: SearchDogsSortField = SearchDogsSortField.Age;
+      const sortDirection: SearchDogsSortDirection =
+        SearchDogsSortDirection.Descending;
+      const { result } = renderHook(() => useDogsStore());
+
+      const res = await act(() =>
+        result.current.getSortText({ sortOption, sortDirection })
+      );
+
+      expect(res).toBe(`${sortOption}:${sortDirection}`);
     });
 
     it("#removeFavoriteDog removes the matching dog from #state.favoriteDogs", () => {
@@ -153,6 +169,47 @@ describe("useDogsStore", () => {
       act(() => result.current.setDogs(mockDogs));
 
       expect(result.current.dogs).toEqual(mockDogs);
+    });
+
+    describe("#setFilterQueryParams", () => {
+      it("Overrides a previous value in #state.filterQueryParams", () => {
+        const { result } = renderHook(() => useDogsStore());
+
+        act(() => result.current.setFilterQueryParams({ size: 100 }));
+
+        expect(result.current.filterQueryParams).toEqual({
+          ...initialState.filterQueryParams,
+          size: 100,
+        });
+      });
+
+      it("Keeps previous values that aren't being overridden", () => {
+        const { result } = renderHook(() => useDogsStore());
+
+        act(() => result.current.setFilterQueryParams({ breeds: mockBreeds }));
+
+        expect(result.current.filterQueryParams).toEqual({
+          ...initialState.filterQueryParams,
+          breeds: mockBreeds,
+        });
+      });
+
+      it("Can pass in multiple values to override", () => {
+        const { result } = renderHook(() => useDogsStore());
+
+        act(() =>
+          result.current.setFilterQueryParams({
+            breeds: mockBreeds,
+            ageMin: 20,
+          })
+        );
+
+        expect(result.current.filterQueryParams).toEqual({
+          ...initialState.filterQueryParams,
+          breeds: mockBreeds,
+          ageMin: 20,
+        });
+      });
     });
 
     it("#setMatchedDog sets #state.matchedDog", () => {

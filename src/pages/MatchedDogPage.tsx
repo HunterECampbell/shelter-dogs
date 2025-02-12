@@ -31,7 +31,7 @@ const MatchedDogPage = () => {
     <MainWrapper>
       <AnimatedPugBackground />
 
-      <Header showLogoutButton={true} />
+      <Header showLogoutButton />
       <MatchedDogCard />
     </MainWrapper>
   );
