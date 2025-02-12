@@ -24,6 +24,7 @@ const AvailableDogsPage = () => {
   const { t } = useTranslation();
 
   const [currentPageNum, setCurrentPageNum] = useState(0);
+  const [from, setFrom] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(25);
 
@@ -94,16 +95,50 @@ const AvailableDogsPage = () => {
   const handleChangePage = async (_: React.MouseEvent | null, page: number) => {
     const pageOption: PageOptions =
       currentPageNum < page ? PageOptions.Next : PageOptions.Previous;
+    const newFrom = getFromWithMinMax(Math.round(page * itemsPerPage));
 
-    setCurrentPageNum(page);
-    await fetchDogs({ pageOption });
+    setCurrentPageNum(getPageWithMinMax(page));
+    setFrom(newFrom);
+    await fetchDogs({
+      pageOption,
+      queryParams: { size: itemsPerPage, from: newFrom },
+    });
   };
   const handleChangeItemsPerPage = async (event: React.ChangeEvent) => {
     const target = event.target as HTMLSelectElement;
     const newItemsPerPage: number = Number(target.value);
+    const newFrom = getFromWithMinMax(
+      Math.floor(itemsPerPage * currentPageNum)
+    );
 
+    setFrom(newFrom);
+    setCurrentPageNum(newFrom / newItemsPerPage);
     setItemsPerPage(newItemsPerPage);
-    await fetchDogs({ queryParams: { size: newItemsPerPage } });
+    await fetchDogs({
+      queryParams: {
+        size: newItemsPerPage,
+        from: newFrom,
+      },
+    });
+  };
+  const getFromWithMinMax = (newFrom: number): number => {
+    if (newFrom > dogPagination.total) return dogPagination.total;
+    if (newFrom < 0) return 0;
+
+    return Math.floor(newFrom);
+  };
+  const getPageWithMinMax = (newPage: number): number => {
+    if (newPage > dogPagination.total) return dogPagination.total;
+    if (newPage < 0) return 0;
+
+    return Math.floor(newPage);
+  };
+  const getToWithMinMax = (newTo: number): number => {
+    if (newTo > dogPagination.total) return dogPagination.total;
+    if (newTo < 0) return 0;
+    if (newTo < itemsPerPage) return itemsPerPage;
+
+    return Math.floor(newTo);
   };
 
   return (
@@ -132,6 +167,11 @@ const AvailableDogsPage = () => {
           sx={{ backgroundColor: "pugTan.main" }}
           component="div"
           count={dogPagination.total}
+          labelDisplayedRows={() =>
+            `${from}-${getToWithMinMax(from + itemsPerPage)} ${t(
+              "dashboard.pagination.of"
+            )} ${dogPagination.total}`
+          }
           labelRowsPerPage={t("dashboard.pagination.items_per_page")}
           page={currentPageNum}
           rowsPerPage={itemsPerPage}

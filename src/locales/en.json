@@ -29,6 +29,7 @@
       }
     },
     "pagination": {
+      "of": "of",
       "items_per_page": "Items per page:"
     },
     "errors": {
