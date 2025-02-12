@@ -47,7 +47,7 @@ const FindFavoritesDescription = () => {
 };
 
 const DescriptionWrapper = muiStyled(Box)`
-  width: 80%;
+  width: 90%;
   text-align: center;
   border-radius: 16px;
   background: var(--pug-tan);

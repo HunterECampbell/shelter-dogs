@@ -20,7 +20,7 @@
   "dashboard": {
     "description": {
       "header": "Welcome to our Virtual Dog Haven!",
-      "message": "We are so happy you are here! We have a lot of furry friends who are ready to join your family! Please take a look at all the dogs we have available for adoption. If you see one you like, hover or click on it and select \"Favorite\"! When you are done selecting your favorites, click the below \"Find My Match\" button to see which furry friend you matched with!",
+      "message": "We are so happy you are here! We have a lot of furry friends who are ready to join your family! Please take a look at all the dogs we have available for adoption. If you see one you like, hover or click on it and select \"Favorite\"! When you are done selecting your favorites, click the \"Find My Match\" button below to see which furry friend you matched with!",
       "buttons": {
         "find_my_match": "Find My Match!"
       }
