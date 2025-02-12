@@ -43,6 +43,7 @@ export interface Position {
 export enum RouteOptions {
   Login = "/",
   AvailableDogs = "/dashboard",
+  MatchedDog = "/match",
 }
 
 export type Size =

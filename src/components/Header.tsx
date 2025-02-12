@@ -30,6 +30,16 @@ const Header = ({ showLogoutButton }: { showLogoutButton?: boolean }) => {
   return (
     <HeaderWrapper>
       <LeftArea>
+        <CompanyName>{t("company_name")}</CompanyName>
+      </LeftArea>
+
+      <CenterArea>
+        <IconWrapper>
+          <Icon />
+        </IconWrapper>
+      </CenterArea>
+
+      <RightArea>
         {showLogoutButton && (
           <ButtonWrapper>
             <CustomButton
@@ -39,14 +49,7 @@ const Header = ({ showLogoutButton }: { showLogoutButton?: boolean }) => {
             />
           </ButtonWrapper>
         )}
-        <CompanyName>{t("company_name")}</CompanyName>
-      </LeftArea>
-
-      <CenterArea>
-        <IconWrapper>
-          <Icon />
-        </IconWrapper>
-      </CenterArea>
+      </RightArea>
     </HeaderWrapper>
   );
 };
@@ -54,6 +57,7 @@ const Header = ({ showLogoutButton }: { showLogoutButton?: boolean }) => {
 const HeaderWrapper = muiStyled(AppBar)`
   background: var(--pug-tan);
   display: flex;
+  flex-direction: row;
   align-items: center;
   height: calc(64 / 16 * 1rem);
 `;
@@ -61,12 +65,23 @@ const HeaderWrapper = muiStyled(AppBar)`
 const LeftArea = styled.div`
   height: 100%;
   display: flex;
-  justify-content: center;
+  flex-grow: 1;
+  justify-content: flex-start;
   align-self: flex-start;
+  padding-left: 16px;
+`;
+
+const RightArea = styled.div`
+  height: 100%;
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-end;
+  align-self: flex-end;
+  padding-right: 16px;
 `;
 
 const ButtonWrapper = styled.div`
-  align-self: flex-start;
+  align-self: flex-end;
   margin-left: 16px;
   height: 100%;
   display: flex;
@@ -77,7 +92,6 @@ const CompanyName = styled.p`
   font-size: calc(28 / 16 * 1rem);
   font-weight: bold;
   color: var(--pug-dark);
-  margin-left: 16px;
   align-self: center;
 `;
 

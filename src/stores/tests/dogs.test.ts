@@ -43,6 +43,7 @@ describe("useDogsStore", () => {
       expect(result.current.dogPagination).toBe(initialState.dogPagination);
       expect(result.current.dogs).toBe(initialState.dogs);
       expect(result.current.favoriteDogs).toBe(initialState.favoriteDogs);
+      expect(result.current.matchedDog).toBe(initialState.matchedDog);
     });
   });
 
@@ -152,6 +153,14 @@ describe("useDogsStore", () => {
       act(() => result.current.setDogs(mockDogs));
 
       expect(result.current.dogs).toEqual(mockDogs);
+    });
+
+    it("#setMatchedDog sets #state.matchedDog", () => {
+      const { result } = renderHook(() => useDogsStore());
+
+      act(() => result.current.setMatchedDog(mockDogs[0]));
+
+      expect(result.current.matchedDog).toEqual(mockDogs[0]);
     });
   });
 

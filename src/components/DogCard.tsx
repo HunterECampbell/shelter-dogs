@@ -15,9 +15,11 @@ import PetsIcon from "@mui/icons-material/Pets";
 const DogCard = ({
   className,
   dogData,
+  hideFavoriteButton,
 }: {
   className?: string;
   dogData: Dog;
+  hideFavoriteButton?: boolean;
 }) => {
   const { t } = useTranslation();
   const {
@@ -107,16 +109,18 @@ const DogCard = ({
               </ItemArea>
             </DetailsArea>
 
-            <FavoriteButtonArea>
-              <CustomButton
-                label={
-                  isFavorite.current
-                    ? t("dashboard.dog_card.buttons.unfavorite")
-                    : t("dashboard.dog_card.buttons.favorite")
-                }
-                onClick={updateFavorite}
-              />
-            </FavoriteButtonArea>
+            {!hideFavoriteButton && (
+              <FavoriteButtonArea>
+                <CustomButton
+                  label={
+                    isFavorite.current
+                      ? t("dashboard.dog_card.buttons.unfavorite")
+                      : t("dashboard.dog_card.buttons.favorite")
+                  }
+                  onClick={updateFavorite}
+                />
+              </FavoriteButtonArea>
+            )}
           </CardBack>
         </FlipWrapper>
       </DogCardArea>

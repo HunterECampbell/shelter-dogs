@@ -16,6 +16,7 @@ export interface DogStoreState {
   dogPagination: SearchDogsResult;
   dogs: Dog[];
   favoriteDogs: Dog[];
+  matchedDog: Dog;
 }
 
 export interface DogStoreActions {
@@ -32,6 +33,7 @@ export interface DogStoreActions {
     dogPaginationResult: DogStoreState["dogPagination"]
   ) => void;
   setDogs: (dogs: DogStoreState["dogs"]) => void;
+  setMatchedDog: (matchedDog: Dog) => void;
 }
 
 export interface DogStoreAPIs {
@@ -63,6 +65,14 @@ export const initialState: DogStoreState = {
   },
   dogs: [],
   favoriteDogs: [],
+  matchedDog: {
+    id: "",
+    img: "",
+    name: "",
+    age: 0,
+    zip_code: "",
+    breed: "",
+  },
 };
 
 export const useDogsStore = create<
@@ -98,6 +108,7 @@ export const useDogsStore = create<
   setDogPagination: (dogPaginationResult: DogStoreState["dogPagination"]) =>
     set(() => ({ dogPagination: dogPaginationResult })),
   setDogs: (dogs: Dog[]) => set(() => ({ dogs })),
+  setMatchedDog: (matchedDog: Dog) => set(() => ({ matchedDog })),
 
   api: {
     getAllBreeds: async (): Promise<Dog["breed"][]> => {

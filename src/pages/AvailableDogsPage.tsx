@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import DogCard from "../components/DogCard";
+import FindFavoritesDescription from "../components/FindFavoritesDescription";
 import GeneralPugBackground from "../components/GeneralPugBackground";
 import Header from "../components/Header";
 import TablePagination from "@mui/material/TablePagination";
@@ -148,6 +149,8 @@ const AvailableDogsPage = () => {
       <Header showLogoutButton={true} />
 
       <DogsArea $numCols={numCols} $numItems={dogs.length}>
+        <FindFavoritesDescription />
+
         {dogs.map((dogData, index) => {
           const row = Math.floor(index / numCols);
           const col = index % numCols;
@@ -252,7 +255,7 @@ const DogsArea = styled.div<{
   overflow-y: auto;
   padding: 24px 0;
 
-  & > div {
+  & > div:not(:first-child) {
     opacity: 0;
     animation: ${mosaicRipple} 1s ease forwards;
     ${(props) =>

@@ -43,6 +43,7 @@ const ButtonWrapper = muiStyled(Button)`
   display: flex;
   justify-content: center;
   align-items: center;
+  font-weight: bold;
 
   &:disabled {
     cursor: not-allowed;
