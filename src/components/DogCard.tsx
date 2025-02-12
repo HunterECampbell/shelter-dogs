@@ -28,6 +28,7 @@ const DogCard = ({
   } = useDogsStore();
 
   const isFavorite = useRef(checkIfDogIsFavorite(dogData.id));
+  const removedAsFavorite = useRef(false);
 
   const getLocationString = (): string => {
     const location = retrieveLocationForZipCode(dogData.zip_code);
@@ -36,8 +37,13 @@ const DogCard = ({
     return `${location.city}, ${location.state} ${location.zip_code}`;
   };
   const updateFavorite = () => {
-    if (isFavorite.current) removeFavoriteDog(dogData.id);
-    else addFavoriteDog(dogData);
+    if (isFavorite.current) {
+      removeFavoriteDog(dogData.id);
+      removedAsFavorite.current = true;
+      setTimeout(() => {
+        removedAsFavorite.current = false;
+      }, 10);
+    } else addFavoriteDog(dogData);
 
     isFavorite.current = checkIfDogIsFavorite(dogData.id);
   };
@@ -54,8 +60,11 @@ const DogCard = ({
 
   return (
     <div className={className}>
-      <DogCardArea $isFavorite={isFavorite.current}>
-        <FlipWrapper sx={{ boxShadow: 5 }} $isFavorite={isFavorite.current}>
+      <DogCardArea
+        $isFavorite={isFavorite.current}
+        $removedAsFavorite={removedAsFavorite.current}
+      >
+        <FlipWrapper sx={{ boxShadow: 5 }}>
           <MemoizedCardFront />
 
           <CardBack>
@@ -125,6 +134,23 @@ const quickGrowShrink = keyframes`
     transform: scale(1);
   }
 `;
+const quickShrinkGrow = keyframes`
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  80% {
+    transform: scale(1);
+  }
+  90% {
+  transform: scale(0.985);
+  }
+  100% {
+    transform: scale(1);
+  }
+`;
 
 const DogCardAreaBefore = muiStyled(Box)`
   --size: 275px;
@@ -142,15 +168,23 @@ const DogCardAreaBefore = muiStyled(Box)`
     transform: rotateY(-180deg);
   }
 `;
-const DogCardArea = styled(DogCardAreaBefore)<{ $isFavorite: boolean }>`
+const DogCardArea = styled(DogCardAreaBefore)<{
+  $isFavorite: boolean;
+  $removedAsFavorite: boolean;
+}>`
   ${(props) =>
     props.$isFavorite &&
     css`
       animation: ${quickGrowShrink} 0.3s ease-in-out;
     `}
+  ${(props) =>
+    props.$removedAsFavorite &&
+    css`
+      animation: ${quickShrinkGrow} 0.3s ease-in-out;
+    `}
 `;
 
-const FlipWrapperBefore = muiStyled(Box)`
+const FlipWrapper = muiStyled(Box)`
   --size: 100%;
 
   position: relative;
@@ -159,21 +193,6 @@ const FlipWrapperBefore = muiStyled(Box)`
   transition: transform 0.6s;
   transform-style: preserve-3d;
   border-radius: 16px;
-`;
-const FlipWrapper = styled(FlipWrapperBefore)<{ $isFavorite: boolean }>`
-  & > div {
-    ${(props) =>
-      props.$isFavorite
-        ? css`
-            box-shadow: 0px 0px 16px 4px var(--cream),
-              0px 0px 24px 4px rgba(230, 206, 67, 0.9),
-              0px 0px 32px 8px rgba(204, 176, 30, 0.9),
-              0px 0px 32px 24px var(--cream);
-          `
-        : css`
-            transition: box-shadow 0.3s ease-in-out;
-          `}
-  }
 `;
 
 const FlipSide = styled.div`

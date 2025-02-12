@@ -52,7 +52,6 @@ const HeaderWrapper = muiStyled(AppBar)`
   background: var(--pug-tan);
   display: flex;
   align-items: center;
-  padding: 8px 0;
   height: calc(64 / 16 * 1rem);
 `;
 
@@ -64,6 +63,7 @@ const CenterArea = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: -1;
 `;
 
 const IconWrapper = styled.div`
@@ -86,6 +86,9 @@ const Icon = styled(PugIcon)`
 const ButtonWrapper = styled.div`
   align-self: flex-start;
   margin-left: 16px;
+  height: 100%;
+  display: flex;
+  align-items: center;
 `;
 
 export default Header;
