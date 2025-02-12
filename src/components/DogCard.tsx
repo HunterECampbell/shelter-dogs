@@ -312,7 +312,7 @@ const ItemDetailLabel = styled(TruncatedText)`
 
 const ItemDetailValue = styled(TruncatedText)`
   color: var(--pug-dark);
-  font-size: calc(20 / 16 * 1rem);
+  font-size: calc(18 / 16 * 1rem);
   text-align: left !important;
   text-wrap: wrap;
 `;
