@@ -9,15 +9,26 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AgeRangeSlider from "./AgeRangeSlider";
 import Autocomplete from "@mui/material/Autocomplete";
+import CustomButton from "../generalComponents/CustomButton";
 import DogSorter from "./DogSorter";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import TextField from "@mui/material/TextField";
 
 const DogFilterAccordion = () => {
-  const { allBreeds, api, setAllBreeds, setFilterQueryParams } = useDogsStore();
+  const {
+    allBreeds,
+    api,
+    filterQueryParams,
+    setAllBreeds,
+    setDogLocations,
+    setDogPagination,
+    setDogs,
+    setFilterQueryParams,
+  } = useDogsStore();
   const { t } = useTranslation();
 
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getAllBreeds = useCallback(async () => {
     const allBreeds = await api.getAllBreeds();
@@ -28,6 +39,25 @@ const DogFilterAccordion = () => {
     getAllBreeds();
   }, [getAllBreeds]);
 
+  const applyFilters = async () => {
+    try {
+      setIsLoading(true);
+      setExpanded(false);
+
+      const paginationResult = await api.searchDogs({
+        queryParams: filterQueryParams,
+      });
+      await setDogPagination(paginationResult);
+
+      const dogsResult = await api.getDogsFromIDs(paginationResult.resultIds);
+      await setDogs(dogsResult);
+
+      const dogLocationsResult = await api.getLocationsFromDogZipCodes();
+      await setDogLocations(dogLocationsResult);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const handleBreedSelection = (_: React.SyntheticEvent, value: unknown) => {
     if (!value) setFilterQueryParams({ breeds: [] });
     else setFilterQueryParams({ breeds: value as string[] });
@@ -45,7 +75,6 @@ const DogFilterAccordion = () => {
         <StyledFilterIcon />
         <FilterText>{t("dashboard.filtering.labels.filter")}</FilterText>
       </StyledAccordionSummary>
-
       <StyledAccordionDetails $expanded={expanded}>
         <DogSorter />
 
@@ -72,6 +101,14 @@ const DogFilterAccordion = () => {
 
         <AgeRangeSlider />
       </StyledAccordionDetails>
+
+      <FooterButtonArea>
+        <CustomButton
+          label={t("dashboard.filtering.buttons.apply_filters")}
+          loading={isLoading}
+          onClick={applyFilters}
+        />
+      </FooterButtonArea>
     </StyledAccordion>
   );
 };
@@ -133,6 +170,11 @@ const StyledTextField = muiStyled(TextField)`
     border-color: var(--pug-nearly-dark);
     color: var(--pug-nearly-dark);
   }
+`;
+
+const FooterButtonArea = styled.div`
+  height: 64px;
+  margin-top: 8px;
 `;
 
 export default DogFilterAccordion;

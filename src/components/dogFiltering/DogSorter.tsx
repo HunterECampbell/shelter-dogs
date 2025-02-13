@@ -104,7 +104,7 @@ const SortOptionsWrapper = styled.div`
 
 const SortOptionsButtonGroup = muiStyled(ToggleButtonGroup)`
   .Mui-selected {
-    background: var(--cream);
+    background-color: var(--cream) !important;
   }
 `;
 
@@ -112,7 +112,7 @@ const SortDirectionButtonGroup = muiStyled(ToggleButtonGroup)`
   margin-top: 8px;
 
   .Mui-selected {
-    background: var(--cream);
+    background-color: var(--cream) !important;
   }
 `;
 

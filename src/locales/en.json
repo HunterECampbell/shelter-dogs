@@ -36,6 +36,9 @@
         "ascending": "Ascending",
         "descending": "Descending",
         "zip_code": "Zip Code"
+      },
+      "buttons": {
+        "apply_filters": "Apply Filters"
       }
     },
     "dog_card": {
