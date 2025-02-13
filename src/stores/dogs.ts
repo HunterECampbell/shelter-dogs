@@ -5,7 +5,6 @@ import { t } from "i18next";
 import { Dog, DogLocation } from "../globalTypes";
 import {
   GetDogMatchResult,
-  PageOptions,
   SearchDogsQueryParams,
   SearchDogsResult,
   SearchDogsSortDirection,
@@ -55,13 +54,9 @@ export interface DogStoreAPIs {
       dogIDs: DogStoreState["dogPagination"]["resultIds"]
     ) => Promise<DogStoreState["dogs"]>;
     getLocationsFromDogZipCodes: () => Promise<DogStoreState["dogLocations"]>;
-    searchDogs: ({
-      pageOption,
-      queryParams,
-    }: {
-      pageOption?: PageOptions;
-      queryParams?: SearchDogsQueryParams;
-    }) => Promise<DogStoreState["dogPagination"]>;
+    searchDogs: (
+      queryParams?: SearchDogsQueryParams
+    ) => Promise<DogStoreState["dogPagination"]>;
   };
 }
 
@@ -79,11 +74,9 @@ export const initialState: DogStoreState = {
   filterQueryParams: {
     ageMin: 0,
     ageMax: 20,
-    breeds: [],
     from: 0,
     size: 25,
     sort: `${SearchDogsSortField.Breed}:${SearchDogsSortDirection.Ascending}`,
-    zipCodes: [],
   },
   matchedDog: {
     id: "",
@@ -213,27 +206,26 @@ export const useDogsStore = create<
         return initialState.dogLocations;
       }
     },
-    searchDogs: async ({
-      pageOption,
-      queryParams,
-    }: {
-      pageOption?: PageOptions;
-      queryParams?: SearchDogsQueryParams;
-    }): Promise<DogStoreState["dogPagination"]> => {
+    searchDogs: async (
+      queryParams?: SearchDogsQueryParams
+    ): Promise<DogStoreState["dogPagination"]> => {
       try {
-        const changePageByOption = (
-          pageOpt?: PageOptions
-        ): string | undefined => {
-          if (!pageOpt) return undefined;
-          if (pageOpt === PageOptions.Next) return get().dogPagination.next;
-          if (pageOpt === PageOptions.Previous) return get().dogPagination.prev;
-        };
-        const apiURL = changePageByOption(pageOption) || "/dogs/search";
+        const updatedQueryParams: SearchDogsQueryParams = { ...queryParams };
+        if (
+          updatedQueryParams?.zipCodes?.length === 0 ||
+          updatedQueryParams?.zipCodes?.[0] === ""
+        )
+          delete updatedQueryParams.zipCodes;
+        if (
+          updatedQueryParams?.breeds?.length === 0 ||
+          updatedQueryParams?.breeds?.[0] === ""
+        )
+          delete updatedQueryParams.breeds;
 
         const res = await handleResponse(
           async () =>
-            await setupAxios().get(apiURL, {
-              params: { ...queryParams },
+            await setupAxios().get("/dogs/search", {
+              params: { ...updatedQueryParams },
             }),
           {
             showAlert: true,

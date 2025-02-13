@@ -44,9 +44,7 @@ const DogFilterAccordion = () => {
       setIsLoading(true);
       setExpanded(false);
 
-      const paginationResult = await api.searchDogs({
-        queryParams: filterQueryParams,
-      });
+      const paginationResult = await api.searchDogs(filterQueryParams);
       await setDogPagination(paginationResult);
 
       const dogsResult = await api.getDogsFromIDs(paginationResult.resultIds);

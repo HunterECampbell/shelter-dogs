@@ -52,7 +52,6 @@ const DescriptionWrapper = muiStyled(Box)`
   border-radius: 16px;
   background: var(--pug-tan);
   padding: 16px;
-  align-self: flex-start;
 `;
 
 const DescriptionHeader = styled.h1``;

@@ -1,7 +1,7 @@
 import styled, { css, keyframes } from "styled-components";
 import { useCallback, useEffect, useState } from "react";
 import { useDogsStore } from "../stores/dogs";
-import { PageOptions, SearchDogsQueryParams } from "../stores/types/apiTypes";
+import { SearchDogsQueryParams } from "../stores/types/apiTypes";
 import { useTranslation } from "react-i18next";
 
 import Backdrop from "@mui/material/Backdrop";
@@ -18,9 +18,11 @@ const AvailableDogsPage = () => {
     api,
     dogPagination,
     dogs,
+    filterQueryParams,
     setDogLocations,
     setDogPagination,
     setDogs,
+    setFilterQueryParams,
   } = useDogsStore();
   const { t } = useTranslation();
 
@@ -30,19 +32,13 @@ const AvailableDogsPage = () => {
   const [itemsPerPage, setItemsPerPage] = useState(25);
 
   const fetchDogs = useCallback(
-    async ({
-      pageOption,
-      queryParams,
-    }: {
-      pageOption?: PageOptions;
-      queryParams?: SearchDogsQueryParams;
-    }) => {
+    async (queryParams?: SearchDogsQueryParams) => {
       try {
         setIsLoading(true);
 
         const paginationResult = await api.searchDogs({
-          pageOption,
-          queryParams,
+          ...filterQueryParams,
+          ...queryParams,
         });
         await setDogPagination(paginationResult);
 
@@ -61,7 +57,7 @@ const AvailableDogsPage = () => {
   );
 
   useEffect(() => {
-    fetchDogs({});
+    fetchDogs();
   }, [fetchDogs]);
 
   const calculateNumCols = () => {
@@ -82,16 +78,12 @@ const AvailableDogsPage = () => {
   }, []);
 
   const handleChangePage = async (_: React.MouseEvent | null, page: number) => {
-    const pageOption: PageOptions =
-      currentPageNum < page ? PageOptions.Next : PageOptions.Previous;
     const newFrom = getFromWithMinMax(Math.round(page * itemsPerPage));
 
-    setCurrentPageNum(getPageWithMinMax(page));
     setFrom(newFrom);
-    await fetchDogs({
-      pageOption,
-      queryParams: { size: itemsPerPage, from: newFrom },
-    });
+    setFilterQueryParams({ from: newFrom });
+    setCurrentPageNum(getPageWithMinMax(page));
+    await fetchDogs({ from: newFrom });
   };
   const handleChangeItemsPerPage = async (event: React.ChangeEvent) => {
     const target = event.target as HTMLSelectElement;
@@ -101,14 +93,10 @@ const AvailableDogsPage = () => {
     );
 
     setFrom(newFrom);
+    setFilterQueryParams({ from: newFrom, size: newItemsPerPage });
     setCurrentPageNum(newFrom / newItemsPerPage);
     setItemsPerPage(newItemsPerPage);
-    await fetchDogs({
-      queryParams: {
-        size: newItemsPerPage,
-        from: newFrom,
-      },
-    });
+    await fetchDogs({ from: newFrom, size: newItemsPerPage });
   };
   const getFromWithMinMax = (newFrom: number): number => {
     if (newFrom > dogPagination.total) return dogPagination.total;
@@ -138,21 +126,23 @@ const AvailableDogsPage = () => {
 
       <DogFiltering />
 
-      <DogsArea $numCols={numCols} $numItems={dogs.length}>
+      <DogsArea>
         <FindFavoritesDescription />
 
-        {dogs.map((dogData, index) => {
-          const row = Math.floor(index / numCols);
-          const col = index % numCols;
-          const delayIndex = row + col + 1;
-          return (
-            <DogCard
-              key={dogData.id}
-              dogData={dogData}
-              className={`d-${delayIndex}`}
-            />
-          );
-        })}
+        <DogListWrapper $numCols={numCols} $numItems={dogs.length}>
+          {dogs.map((dogData, index) => {
+            const row = Math.floor(index / numCols);
+            const col = index % numCols;
+            const delayIndex = row + col + 1;
+            return (
+              <DogCard
+                key={dogData.id}
+                dogData={dogData}
+                className={`d-${delayIndex}`}
+              />
+            );
+          })}
+        </DogListWrapper>
       </DogsArea>
 
       <PaginationWrapper>
@@ -229,7 +219,17 @@ const MainWrapper = styled.div`
   overflow: hidden;
 `;
 
-const DogsArea = styled.div<{
+const DogsArea = styled.div`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  overflow-y: auto;
+  padding: 24px 0;
+`;
+
+const DogListWrapper = styled.div<{
   $numCols: number;
   $numItems: number;
 }>`
@@ -239,10 +239,8 @@ const DogsArea = styled.div<{
   justify-content: center;
   align-items: center;
   gap: 24px;
-  overflow-y: auto;
-  padding: 24px 0;
 
-  & > div:not(:first-child) {
+  & > div {
     opacity: 0;
     animation: ${mosaicRipple} 1s ease forwards;
     ${(props) =>
