@@ -3,6 +3,12 @@ import { initialState, useAlertStore } from "../alert";
 import { Alert, AlertType } from "../../globalTypes";
 
 describe("useAlertStore", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.resetAllMocks();
+    vi.restoreAllMocks();
+  });
+
   describe("#state", () => {
     it("Returns the initial state", () => {
       const { result } = renderHook(() => useAlertStore());

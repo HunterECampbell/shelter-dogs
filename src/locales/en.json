@@ -16,5 +16,54 @@
       "login_failed": "There was a problem logging you in.",
       "logout_failed": "There was a problem logging you out."
     }
+  },
+  "dashboard": {
+    "description": {
+      "header": "Welcome to our Virtual Dog Haven!",
+      "message": "We are so happy you are here! We have a lot of furry friends who are ready to join your family! Please take a look at all the dogs we have available for adoption. If you see one you like, hover or click on it and select \"Favorite\"! When you are done selecting your favorites, click the \"Find My Match\" button below to see which furry friend you matched with!",
+      "buttons": {
+        "find_my_match": "Find My Match!"
+      }
+    },
+    "filtering": {
+      "labels": {
+        "filter": "Filter",
+        "sort": "Sort",
+        "breed": "Breed",
+        "name": "Name",
+        "age": "Age",
+        "age_range": "Age Range",
+        "ascending": "Ascending",
+        "descending": "Descending",
+        "zip_code": "Zip Code"
+      },
+      "buttons": {
+        "apply_filters": "Apply Filters"
+      }
+    },
+    "dog_card": {
+      "labels": {
+        "breed": "Breed",
+        "location": "Location",
+        "years_abbreviation": "yrs"
+      },
+      "buttons": {
+        "favorite": "Favorite",
+        "unfavorite": "Unfavorite"
+      }
+    },
+    "pagination": {
+      "of": "of",
+      "items_per_page": "Items per page:"
+    },
+    "errors": {
+      "get_dogs_failed": "There was a problem retrieving the dogs.",
+      "get_dog_match_failed": "There was a problem retrieving the dog you matched with.",
+      "search_dogs_failed": "There was a problem searching for the dogs."
+    },
+    "no_items": "No dogs found."
+  },
+  "match_page": {
+    "header": "We Found Your Match!"
   }
 }

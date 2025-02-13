@@ -24,9 +24,7 @@ export interface Dog {
   breed: string;
 }
 
-export type Email = `${string}@${string}.${string}`;
-
-export interface Location {
+export interface DogLocation {
   zip_code: string;
   latitude: number;
   longitude: number;
@@ -34,6 +32,8 @@ export interface Location {
   state: string;
   county: string;
 }
+
+export type Email = `${string}@${string}.${string}`;
 
 export interface Position {
   x: number;
@@ -43,6 +43,7 @@ export interface Position {
 export enum RouteOptions {
   Login = "/",
   AvailableDogs = "/dashboard",
+  MatchedDog = "/match",
 }
 
 export type Size =

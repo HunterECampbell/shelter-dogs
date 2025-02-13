@@ -64,7 +64,7 @@ const LoginCard = () => {
         <InputArea>
           <TextField
             color="secondary"
-            fullWidth={true}
+            fullWidth
             label={t("login.inputs.name")}
             variant="outlined"
             onChange={handleSetName}
@@ -73,7 +73,7 @@ const LoginCard = () => {
           <TextField
             color="secondary"
             error={emailError && emailInputHasBlurred}
-            fullWidth={true}
+            fullWidth
             helperText={
               emailError && emailInputHasBlurred ? t("login.errors.email") : ""
             }
@@ -111,14 +111,14 @@ const LoginWrapper = styled.div`
   align-items: center;
 `;
 
-const CardWrapper = muiStyled(Card)(({ theme }) => ({
-  backgroundColor: theme.palette.custom.pugTan,
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  textAlign: "center",
-}));
+const CardWrapper = muiStyled(Card)`
+  background-color: var(--pug-tan);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+`;
 
 const CardHeader = styled.h1`
   text-align: center;

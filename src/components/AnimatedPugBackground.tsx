@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import AnimatedPugHead from "./AnimatedPugHead";
 
-const PugBackground = () => {
+const AnimatedPugBackground = () => {
   const viewportSize: number = window.innerHeight + window.innerWidth;
   const numberOfPugs: number = Math.floor(viewportSize / 200);
 
@@ -17,6 +17,7 @@ const Background = styled.div`
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+  background: var(--cream);
 `;
 
-export default PugBackground;
+export default AnimatedPugBackground;

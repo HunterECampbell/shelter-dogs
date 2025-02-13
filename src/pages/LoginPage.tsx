@@ -1,13 +1,13 @@
 import styled from "styled-components";
 
-import PugBackground from "../components/PugBackground";
+import AnimatedPugBackground from "../components/AnimatedPugBackground";
 import Header from "../components/Header";
 import LoginCard from "../components/LoginCard";
 
 const LoginPage = () => {
   return (
     <MainWrapper>
-      <PugBackground />
+      <AnimatedPugBackground />
 
       <Header />
       <LoginCard />

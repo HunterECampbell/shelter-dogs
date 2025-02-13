@@ -15,6 +15,7 @@ import ApplicationAlert from "./components/generalComponents/ApplicationAlert.ts
 
 import LoginPage from "./pages/LoginPage.tsx";
 import AvailableDogsPage from "./pages/AvailableDogsPage.tsx";
+import MatchedDogPage from "./pages/MatchedDogPage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -31,6 +32,10 @@ createRoot(document.getElementById("root")!).render(
             <Route
               path={RouteOptions.AvailableDogs}
               element={<AvailableDogsPage />}
+            />
+            <Route
+              path={`${RouteOptions.MatchedDog}/:dogID`}
+              element={<MatchedDogPage />}
             />
           </Route>
 

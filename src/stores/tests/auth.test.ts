@@ -13,6 +13,12 @@ vi.mock("../../setupAxios", () => {
 });
 
 describe("useAuthStore", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.resetAllMocks();
+    vi.restoreAllMocks();
+  });
+
   describe("#state", () => {
     it("Returns the initial state", () => {
       const { result } = renderHook(() => useAuthStore());
@@ -53,7 +59,7 @@ describe("useAuthStore", () => {
         });
       });
 
-      it("Update #state.isAuthenticated on success", async () => {
+      it("Updates #state.isAuthenticated on success", async () => {
         vi.mocked(setupAxios().post).mockResolvedValue({ status: 200 });
         const { result } = renderHook(() => useAuthStore());
 
