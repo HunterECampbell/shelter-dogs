@@ -3,6 +3,7 @@ import { styled as muiStyled } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { useDogsStore } from "../../stores/dogs";
+import { mediaQueryBreakpoint } from "../../consts/DeviceBreakpoints";
 
 import Slider from "@mui/material/Slider";
 
@@ -39,10 +40,15 @@ const AgeRangeSlider = () => {
 const SliderWrapper = styled.div`
   width: 275px;
   align-self: flex-end;
-  padding: 0 8px;
+  padding: 0 16px;
 
   .MuiSlider-valueLabel {
     background-color: var(--pug-nearly-dark);
+  }
+
+  @media ${mediaQueryBreakpoint.tabletAndDown} {
+    align-self: center;
+    margin-top: 20px;
   }
 `;
 
@@ -51,6 +57,11 @@ const SliderHeader = styled.p`
   font-weight: bold;
   color: var(--pug-nearly-dark);
   text-align: center;
+
+  @media ${mediaQueryBreakpoint.tabletAndDown} {
+    margin-top: -12px;
+    margin-bottom: 16px;
+  }
 `;
 
 const StyledSlider = muiStyled(Slider)``;

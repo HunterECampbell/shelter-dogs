@@ -3,6 +3,7 @@ import { styled as muiStyled } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDogsStore } from "../../stores/dogs";
+import { mediaQueryBreakpoint } from "../../consts/DeviceBreakpoints";
 
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -73,6 +74,7 @@ const DogFilterAccordion = () => {
         <StyledFilterIcon />
         <FilterText>{t("dashboard.filtering.labels.filter")}</FilterText>
       </StyledAccordionSummary>
+
       <StyledAccordionDetails $expanded={expanded}>
         <DogSorter />
 
@@ -130,6 +132,13 @@ const StyledAccordionDetails = styled(StyledAccordionDetailsBefore)<{
   width: ${(props) => (props.$expanded ? "100vw" : "0")};
   display: flex;
   gap: 24px;
+
+  @media ${mediaQueryBreakpoint.tabletAndDown} {
+    flex-direction: column;
+    align-items: center;
+    padding: 0 !important;
+    margin-left: -8px;
+  }
 `;
 
 const StyledFilterIcon = muiStyled(FilterAltIcon)`
@@ -153,7 +162,7 @@ const InputWrapper = styled.div`
 
 const StyledAutocomplete = muiStyled(Autocomplete)`
   width: 275px;
-    border-color: var(--pug-nearly-dark);
+  border-color: var(--pug-nearly-dark);
 
   * {
     border-color: var(--pug-nearly-dark);
