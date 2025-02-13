@@ -1,6 +1,6 @@
 # Access Github Pages Hosted Site
 
-[Pugtastic](https://hunterecampbell.github.io/shelter-dogs/)
+[https://hunterecampbell.github.io/shelter-dogs/](https://hunterecampbell.github.io/shelter-dogs/)
 
 # How To Run Locally
 
