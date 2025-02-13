@@ -1,3 +1,7 @@
+# Access Github Pages Hosted Site
+
+[Pugtastic](https://hunterecampbell.github.io/shelter-dogs/)
+
 # How To Run Locally
 
 1. In your terminal, run `npm i`
