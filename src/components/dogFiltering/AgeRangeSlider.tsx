@@ -19,7 +19,7 @@ const AgeRangeSlider = () => {
     }
 
     setAgeRange(value as [number, number]);
-    setFilterQueryParams({ ageMin: value[0], ageMax: value[1] });
+    setFilterQueryParams({ ageMin: value[0], ageMax: value[1], from: 0 });
   };
 
   return (

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { styled as muiStyled } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDogsStore } from "../../stores/dogs";
 import { mediaQueryBreakpoint } from "../../consts/DeviceBreakpoints";
 
@@ -31,14 +31,16 @@ const DogFilterAccordion = () => {
   const [expanded, setExpanded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const getAllBreeds = useCallback(async () => {
+  const getAllBreeds = async () => {
     const allBreeds = await api.getAllBreeds();
     setAllBreeds(allBreeds);
-  }, [api, setAllBreeds]);
+  };
 
   useEffect(() => {
     getAllBreeds();
-  }, [getAllBreeds]);
+    // Disabling next line because I only want this called once.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const applyFilters = async () => {
     try {
@@ -58,14 +60,14 @@ const DogFilterAccordion = () => {
     }
   };
   const handleBreedSelection = (_: React.SyntheticEvent, value: unknown) => {
-    if (!value) setFilterQueryParams({ breeds: [] });
-    else setFilterQueryParams({ breeds: value as string[] });
+    if (!value) setFilterQueryParams({ breeds: [], from: 0 });
+    else setFilterQueryParams({ breeds: value as string[], from: 0 });
   };
   const handleExpansion = (_: React.SyntheticEvent, expanded: boolean) => {
     setExpanded(expanded);
   };
   const handleZipCodeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterQueryParams({ zipCodes: [event.target.value] });
+    setFilterQueryParams({ zipCodes: [event.target.value], from: 0 });
   };
 
   return (

@@ -30,6 +30,7 @@ const DogSorter = () => {
       setSortDirection(value);
       setFilterQueryParams({
         sort: getSortText({ sortOption, sortDirection: value }),
+        from: 0,
       });
     }
   };
@@ -41,6 +42,7 @@ const DogSorter = () => {
       setSortOption(value);
       setFilterQueryParams({
         sort: getSortText({ sortOption: value, sortDirection }),
+        from: 0,
       });
     }
   };

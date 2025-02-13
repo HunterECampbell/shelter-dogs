@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useDogsStore } from "../stores/dogs";
 import { useParams } from "react-router";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 
 import AnimatedPugBackground from "../components/AnimatedPugBackground";
 import Header from "../components/Header";
@@ -12,20 +12,19 @@ const MatchedDogPage = () => {
   const { api, setMatchedDog } = useDogsStore();
   const { dogID } = useParams();
 
-  const getMatch = useCallback(async () => {
+  const getMatch = async () => {
     if (!dogID) return;
 
     const matchedDog: Dog[] = await api.getDogsFromIDs([dogID]);
 
     if (matchedDog.length) setMatchedDog(matchedDog[0]);
-
-    // This function is used outside of the useEffect and must be run only once in useEffect. Disabling next line for that reason.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
 
   useEffect(() => {
     getMatch();
-  }, [getMatch]);
+    // Disabling next line because I only want this called once.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <MainWrapper>

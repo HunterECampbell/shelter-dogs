@@ -1,5 +1,5 @@
 import styled, { css, keyframes } from "styled-components";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDogsStore } from "../stores/dogs";
 import { SearchDogsQueryParams } from "../stores/types/apiTypes";
 import { useTranslation } from "react-i18next";
@@ -32,34 +32,43 @@ const AvailableDogsPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(25);
 
-  const fetchDogs = useCallback(
-    async (queryParams?: SearchDogsQueryParams) => {
-      try {
-        setIsLoading(true);
+  const fetchDogs = async (queryParams?: SearchDogsQueryParams) => {
+    try {
+      setIsLoading(true);
 
-        const paginationResult = await api.searchDogs({
-          ...filterQueryParams,
-          ...queryParams,
-        });
-        await setDogPagination(paginationResult);
-
-        const dogsResult = await api.getDogsFromIDs(paginationResult.resultIds);
-        await setDogs(dogsResult);
-
-        const dogLocationsResult = await api.getLocationsFromDogZipCodes();
-        await setDogLocations(dogLocationsResult);
-      } finally {
-        setIsLoading(false);
+      if (filterQueryParams.from === 0 && !queryParams?.from) {
+        setFrom(filterQueryParams.from);
+        setCurrentPageNum(0);
       }
-    },
-    // This function is used outside of the useEffect and must be run only once in useEffect. Disabling next line for that reason.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+
+      const paginationResult = await api.searchDogs({
+        ...filterQueryParams,
+        ...queryParams,
+      });
+      await setDogPagination(paginationResult);
+
+      const dogsResult = await api.getDogsFromIDs(paginationResult.resultIds);
+      await setDogs(dogsResult);
+
+      const dogLocationsResult = await api.getLocationsFromDogZipCodes();
+      await setDogLocations(dogLocationsResult);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchDogs();
-  }, [fetchDogs]);
+    // Disabling next line because I only want this called once.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (filterQueryParams.from !== 0) return;
+
+    setFrom(0);
+    setCurrentPageNum(0);
+  }, [filterQueryParams]);
 
   const calculateNumCols = () => {
     const dogCardSize = 275;
@@ -131,22 +140,20 @@ const AvailableDogsPage = () => {
         <FindFavoritesDescription />
 
         <DogListWrapper $numCols={numCols} $numItems={dogs.length}>
-          {dogs.length ? (
-            dogs.map((dogData, index) => {
-              const row = Math.floor(index / numCols);
-              const col = index % numCols;
-              const delayIndex = row + col + 1;
-              return (
-                <DogCard
-                  key={dogData.id}
-                  dogData={dogData}
-                  className={`d-${delayIndex}`}
-                />
-              );
-            })
-          ) : (
-            <NoItems />
-          )}
+          {dogs.length
+            ? dogs.map((dogData, index) => {
+                const row = Math.floor(index / numCols);
+                const col = index % numCols;
+                const delayIndex = row + col + 1;
+                return (
+                  <DogCard
+                    key={dogData.id}
+                    dogData={dogData}
+                    className={`d-${delayIndex}`}
+                  />
+                );
+              })
+            : !isLoading && <NoItems />}
         </DogListWrapper>
       </DogsArea>
 
