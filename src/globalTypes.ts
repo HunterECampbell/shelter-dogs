@@ -41,9 +41,9 @@ export interface Position {
 }
 
 export enum RouteOptions {
-  Login = "/",
-  AvailableDogs = "/dashboard",
-  MatchedDog = "/match",
+  Login = "/shelter-dogs",
+  AvailableDogs = "/shelter-dogs/dashboard",
+  MatchedDog = "/shelter-dogs/match",
 }
 
 export type Size =
