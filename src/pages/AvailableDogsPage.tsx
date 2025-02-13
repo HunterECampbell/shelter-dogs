@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import DogCard from "../components/DogCard";
-import DogSearchAndFiltering from "../components/dogFiltering/DogSearchAndFiltering";
+import DogFiltering from "../components/dogFiltering/DogFiltering";
 import FindFavoritesDescription from "../components/FindFavoritesDescription";
 import GeneralPugBackground from "../components/GeneralPugBackground";
 import Header from "../components/Header";
@@ -136,7 +136,7 @@ const AvailableDogsPage = () => {
 
       <Header showLogoutButton />
 
-      <DogSearchAndFiltering />
+      <DogFiltering />
 
       <DogsArea $numCols={numCols} $numItems={dogs.length}>
         <FindFavoritesDescription />

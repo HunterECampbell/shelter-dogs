@@ -2,14 +2,12 @@ import styled from "styled-components";
 
 import DogFilterAccordion from "./DogFilterAccordion";
 
-const DogSearchAndFiltering = () => {
+const DogFiltering = () => {
   return (
     <FilterAndSearchWrapper>
       <AccordionWrapper>
         <DogFilterAccordion />
       </AccordionWrapper>
-
-      <SearchWrapper>zxcv</SearchWrapper>
     </FilterAndSearchWrapper>
   );
 };
@@ -22,6 +20,4 @@ const FilterAndSearchWrapper = styled.div`
 
 const AccordionWrapper = styled.div``;
 
-const SearchWrapper = styled.div``;
-
-export default DogSearchAndFiltering;
+export default DogFiltering;

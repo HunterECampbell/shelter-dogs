@@ -39,6 +39,7 @@ const AgeRangeSlider = () => {
 const SliderWrapper = styled.div`
   width: 275px;
   align-self: flex-end;
+  padding: 0 8px;
 
   .MuiSlider-valueLabel {
     background-color: var(--pug-nearly-dark);
