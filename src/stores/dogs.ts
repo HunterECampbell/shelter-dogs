@@ -77,9 +77,13 @@ export const initialState: DogStoreState = {
   dogs: [],
   favoriteDogs: [],
   filterQueryParams: {
+    ageMin: 0,
+    ageMax: 20,
+    breeds: [],
     from: 0,
     size: 25,
     sort: `${SearchDogsSortField.Breed}:${SearchDogsSortDirection.Ascending}`,
+    zipCodes: [],
   },
   matchedDog: {
     id: "",

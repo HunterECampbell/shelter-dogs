@@ -7,6 +7,7 @@ import { useDogsStore } from "../../stores/dogs";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
+import AgeRangeSlider from "./AgeRangeSlider";
 import Autocomplete from "@mui/material/Autocomplete";
 import DogSorter from "./DogSorter";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
@@ -68,6 +69,8 @@ const DogFilterAccordion = () => {
             onChange={handleZipCodeValue}
           />
         </InputWrapper>
+
+        <AgeRangeSlider />
       </StyledAccordionDetails>
     </StyledAccordion>
   );

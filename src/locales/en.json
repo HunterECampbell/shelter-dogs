@@ -32,6 +32,7 @@
         "breed": "Breed",
         "name": "Name",
         "age": "Age",
+        "age_range": "Age Range",
         "ascending": "Ascending",
         "descending": "Descending",
         "zip_code": "Zip Code"
