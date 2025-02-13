@@ -111,14 +111,14 @@ const LoginWrapper = styled.div`
   align-items: center;
 `;
 
-const CardWrapper = muiStyled(Card)(({ theme }) => ({
-  backgroundColor: theme.palette.pugTan.main,
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  textAlign: "center",
-}));
+const CardWrapper = muiStyled(Card)`
+  background-color: var(--pug-tan);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+`;
 
 const CardHeader = styled.h1`
   text-align: center;

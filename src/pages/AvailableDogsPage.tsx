@@ -11,6 +11,7 @@ import DogFiltering from "../components/dogFiltering/DogFiltering";
 import FindFavoritesDescription from "../components/FindFavoritesDescription";
 import GeneralPugBackground from "../components/GeneralPugBackground";
 import Header from "../components/Header";
+import NoItems from "../components/NoItems";
 import TablePagination from "@mui/material/TablePagination";
 
 const AvailableDogsPage = () => {
@@ -130,18 +131,22 @@ const AvailableDogsPage = () => {
         <FindFavoritesDescription />
 
         <DogListWrapper $numCols={numCols} $numItems={dogs.length}>
-          {dogs.map((dogData, index) => {
-            const row = Math.floor(index / numCols);
-            const col = index % numCols;
-            const delayIndex = row + col + 1;
-            return (
-              <DogCard
-                key={dogData.id}
-                dogData={dogData}
-                className={`d-${delayIndex}`}
-              />
-            );
-          })}
+          {dogs.length ? (
+            dogs.map((dogData, index) => {
+              const row = Math.floor(index / numCols);
+              const col = index % numCols;
+              const delayIndex = row + col + 1;
+              return (
+                <DogCard
+                  key={dogData.id}
+                  dogData={dogData}
+                  className={`d-${delayIndex}`}
+                />
+              );
+            })
+          ) : (
+            <NoItems />
+          )}
         </DogListWrapper>
       </DogsArea>
 
